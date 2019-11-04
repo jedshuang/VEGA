@@ -1,0 +1,23 @@
+{
+  "name": "vega",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./app/views/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scaspin/VEGA.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scaspin/VEGA/issues"
+  },
+  "homepage": "https://github.com/scaspin/VEGA#readme",
+  "dependencies": {
+    "browser-sync": "^2.26.7"
+  },
+  "devDependencies": {}
+}
