@@ -44,8 +44,8 @@ body{
     height: 300px;
     float: left;
     margin-top: 40px;
-    border-top: 1px solid rgba(128, 128, 128, 0.486);
-    border-bottom: 1px solid rgba(128, 128, 128, 0.486);
+    /* border-top: 1px solid rgba(128, 128, 128, 0.486); */
+    /* border-bottom: 1px solid rgba(128, 128, 128, 0.486); */
     align-content: center;
 }
 #blurb{
@@ -69,3 +69,12 @@ body{
     width: 50%;
 }
     
+#login-button{
+    margin-left: 130px;
+    height: 36px;
+    width: 120px;
+    background-color: lightblue;
+    font-size: 14px;
+    font-weight: bolder;
+    border-radius: 5px;
+}
