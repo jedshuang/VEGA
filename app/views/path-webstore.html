@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>VEGA</title>    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/landing-page-style.css"/>
+    </head>
+
+    <body>
+        <div id="root"></div>
+
+        <script src="node_modules/jquery/dist/jquery.js"></script>
+        <script src="index.js" type="module"></script> 
+        
+        <div id="navbar">
+            <a href="../../index.html">
+                <img src="../assets/images/vega-logo-black.svg" id="logo-head">
+                <h3 id="tag-line">Your guides to the internet</h3>
+            </a>
+        
+            <div id="nav-buttons">
+                <button class="nav-butt selected"><bold>paths</bold></button>
+                <a href="app/views/login.html"><button class="button" id="login-button">login</button></a>
+                
+            </div>
+            <div id="nav-buttons">
+                <a href="about.html"><button class="nav-butt">about</button></a>
+                <a href="faq.html"><button class="nav-butt">FAQ</button></a>
+                <a href="examples.html"><button class="nav-butt">examples</button></a>
+            </div>
+        </div>
+
+        <table class="table is-fullwidth is-hoverable is-striped" id="webstore-table">
+            <thead>
+                <th>Path</th>
+                <th>Description</th>
+                <th>Times Travelled</th>
+                <th>Path Maker</th>
+                <th>Discovered on</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Making a youtube playlist</th>
+                    <td>Learn how to link your favorite radiohead songs</td>
+                    <td>567</td>
+                    <td>Shai the incredible</td>
+                    <td>1999</td>
+                    <td><a href="#"><button class="explore-button">explore</button></a></td>
+                </tr>
+                <tr>
+                    <th>How to beat tetris</th>
+                    <td>Learn how to win tetris from the experts</td>
+                    <td>15</td>
+                    <td>Hannah :)</td>
+                    <td>1769</td> 
+                    <td><a href="#"><button class="explore-button">explore</button></a></td>
+                </tr>
+                <tr>
+                    <th>How to find memes on reddit</th>
+                    <td>Become a meme god with these two simple steps</td>
+                    <td>0</td>
+                    <td>Calvin Lee Lane III</td>
+                    <td>1492</td> 
+                    <td><a href="#"><button class="explore-button">explore</button></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>  
+</html>
