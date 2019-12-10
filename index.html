@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>VEGA</title>    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
         <link rel="stylesheet" href="./app/assets/stylesheets/landing-page-style.css"/>
 
     </head>
@@ -16,18 +17,20 @@
         <script src="/app/assets/javascripts/index.js" type="module"></script> 
         
         <div id="navbar">
-            <img src="app/assets/images/vega-logo-black.svg" id="logo-head">
-            <h3 id="tag-line">Your guides to the internet</h3>
-
+            <a href="#">
+                <img src="app/assets/images/vega-logo-black.svg" id="logo-head">
+                <h3 id="tag-line">Your guides to the internet</h3>
+            </a>
+        
             <div id="nav-buttons">
-                <button class="nav-butt">Paths</button>
+                <a href="app/views/path-webstore.html"><button class="nav-butt"><bold>paths</bold></button></a>
                 <a href="app/views/login.html"><button class="button" id="login-button">login</button></a>
                 
             </div>
             <div id="nav-buttons">
-                <button class="nav-butt">About</button>
-                <button class="nav-butt">FAQ</button>
-                <button class="nav-butt">Examples</button>
+                    <a href="./app/views/about.html"><button class="nav-butt">about</button></a>
+                    <a href="./app/views/faq.html"><button class="nav-butt selected ">FAQ</button></a>
+                    <a href="./app/views/examples.html"><button class="nav-butt">examples</button></a>
             </div>
         </div>
         <div id="blurb">
