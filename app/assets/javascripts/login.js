@@ -1,4 +1,8 @@
+
+
 export const $base = $('#main');
+
+export let myStorage = window.localStorage;
 
 export async function loadSignIn(){
     
@@ -9,7 +13,7 @@ export async function loadSignIn(){
 }
 
 export async function signUpFormRender() {
-    event.preventDefault();
+    // event.preventDefault();
 
     $base.children(".signIn").replaceWith(`<p class="signIn">Sign Up</p>`);
     $base.children(".form1").replaceWith(renderSignUp());
@@ -23,15 +27,29 @@ export async function signUpFormRender() {
 
 export async function handleLogin(){
     event.preventDefault();
-    let jwt = 0;
+    let jwt = null;
     let us = document.getElementById("us").value;
     let ps = document.getElementById("ps").value;
 
+    let r = axios.post('http://localhost:3000/account/login',
+        {
+            name: us,
+            pass: ps,
+        });
 
-    sessionStorage.setItem("cookie", jwt);
-
-    //Going back to home page signed in
-    location.href = "../../index.html";
+        r.then(response => {
+           
+            jwt = response.data.jwt;
+            console.log(jwt);
+            myStorage.setItem("jwt", jwt);
+            alert("Succesfully signed in")
+            console.log(myStorage.getItem("jwt"));
+          }).catch(error => {
+            
+            $base.children(".after").append(`<p id= "fail"> Username or Password is incorrect </p> `)
+            
+          });
+    
 }
 
 export async function handlesignUp(){
@@ -57,11 +75,8 @@ export async function handlesignUp(){
         password = ps;
     }
 
-    let result = await axios({
-        method: 'post',
-        // WE ARE GOING TO NEED TO CHANGE THESE FOR EACH THING
-        url: 'http://localhost:3000/account/create',
-        data: {
+    let result = axios.post('http://localhost:3000/account/create',
+        {
             name: name,
             pass: password,
             data: {
@@ -69,18 +84,13 @@ export async function handlesignUp(){
                 email: emails,
                 DAG: null,
             }
-        },
     });
-
-    console.log(result);
-    /*
+    
     result.then(response => {
         console.log(response.data);
       }).catch(error => {
-        console.log(error);
-      });*/
-
-      return false;
+        console.log("Fuck");
+      });
 }
 
 export const handlesignUpC = function(){
@@ -99,7 +109,7 @@ export const renderSignIn = function() {
 
     return `<form id = "form1" class="form1">
             <input id="us" type="text" placeholder="Username">
-            <input id="ps" type="password" placeholder="Password">
+            <input class= "after" id="ps" type="password" placeholder="Password">
             <div id = "buttons">
             <button class="submit" type='button'>Sign in</button>
             <button class ="sup" type='button' > Sign up</button>
