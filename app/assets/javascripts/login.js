@@ -1,4 +1,9 @@
+
+
 export const $base = $('#main');
+
+export let myStorage = window.localStorage;
+
 
 export async function loadSignIn(){
     
@@ -9,7 +14,7 @@ export async function loadSignIn(){
 }
 
 export async function signUpFormRender() {
-    event.preventDefault();
+    // event.preventDefault();
 
     $base.children(".signIn").replaceWith(`<p class="signIn">Sign Up</p>`);
     $base.children(".form1").replaceWith(renderSignUp());
@@ -23,15 +28,37 @@ export async function signUpFormRender() {
 
 export async function handleLogin(){
     event.preventDefault();
-    let jwt = 0;
+    let jwt = null;
     let us = document.getElementById("us").value;
     let ps = document.getElementById("ps").value;
 
+    let r =  axios.post('http://localhost:3000/account/login',
+        {
+            name: us,
+            pass: ps,
+        });
 
-    sessionStorage.setItem("cookie", jwt);
+        r.then(response => {
+           
+            jwt = response.data.jwt;
+        
+            myStorage.setItem("jwt", jwt);
+            myStorage.setItem("username", us);
+            
+            alert("Succesfully signed in")
+            location.href = "../../index.html"
 
-    //Going back to home page signed in
-    location.href = "../../index.html";
+            
+
+          }).then(response => alert(response.message)
+          ).catch(error => {
+            
+           if( $("#fail").length ==0 ){
+            $base.children(".form1").prepend(`<p class = "wrong" id= "fail"> Username or Password is incorrect </p> `);
+            
+           } 
+          });
+    
 }
 
 export async function handlesignUp(){
@@ -52,35 +79,34 @@ export async function handlesignUp(){
     let name = firstn + "-" + lastn;
     if(ps !== psR){
         alert("Passwords do not match");
+        document.getElementById("passwords").value = '';
+        document.getElementById("passwordsR").value = '';
         return;
     } else {
         password = ps;
     }
 
-    let result = await axios({
-        method: 'post',
-        // WE ARE GOING TO NEED TO CHANGE THESE FOR EACH THING
-        url: 'http://localhost:3000/account/create',
-        data: {
+    let result = axios.post('http://localhost:3000/account/create',
+        {
             name: name,
             pass: password,
             data: {
                 role: 'user',
                 email: emails,
-                DAG: null,
             }
-        },
     });
-
-    console.log(result);
-    /*
+    
     result.then(response => {
-        console.log(response.data);
-      }).catch(error => {
-        console.log(error);
-      });*/
-
-      return false;
+        console.log(response.status);
+      }).then(response => alert(response.msg)
+      ).catch(error => {
+        alert(error.response.data.msg);
+        document.getElementById("place1").value = '';
+        document.getElementById("place2").value = '';
+        document.getElementById("place3").value = '';
+        document.getElementById("passwords").value = '';
+        document.getElementById("passwordsR").value = '';
+      });
 }
 
 export const handlesignUpC = function(){
@@ -99,7 +125,7 @@ export const renderSignIn = function() {
 
     return `<form id = "form1" class="form1">
             <input id="us" type="text" placeholder="Username">
-            <input id="ps" type="password" placeholder="Password">
+            <input class= "after" id="ps" type="password" placeholder="Password">
             <div id = "buttons">
             <button class="submit" type='button'>Sign in</button>
             <button class ="sup" type='button' > Sign up</button>

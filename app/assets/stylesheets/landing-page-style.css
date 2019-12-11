@@ -83,6 +83,16 @@ a{
     border-radius: 5px;
 }
 
+#logout-button{
+    margin-left: 130px;
+    height: 36px;
+    width: 120px;
+    background-color: lightblue;
+    font-size: 14px;
+    font-weight: bolder;
+    border-radius: 5px;
+}
+
 .selected{
     font-weight: bolder;
 }
@@ -125,6 +135,7 @@ a{
     margin-left: 15%; 
     padding:15px; 
     border-radius: 10px; 
+    margin-top: 20px;
 } 
 
 input[type=text] { 
