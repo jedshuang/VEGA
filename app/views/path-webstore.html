@@ -13,7 +13,7 @@
         <div id="root"></div>
 
         <script src="node_modules/jquery/dist/jquery.js"></script>
-        <script src="index.js" type="module"></script> 
+        <script src="webstore.js" type="module"></script> 
         
         <div id="navbar">
             <a href="../../index.html">
@@ -31,6 +31,11 @@
                 <a href="faq.html"><button class="nav-butt">FAQ</button></a>
                 <a href="examples.html"><button class="nav-butt">examples</button></a>
             </div>
+        </div>
+
+        <div id="search-bar">
+            <input id="searchbar" onblur="search_paths()" type="text"
+            name="search" placeholder="Explore paths.."> 
         </div>
 
         <table class="table is-fullwidth is-hoverable is-striped" id="webstore-table">
