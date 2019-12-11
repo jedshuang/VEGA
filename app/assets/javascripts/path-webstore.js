@@ -11,10 +11,13 @@ $(function() {
 
 export async function grabDagTree() {
 
-    let r =  axios.get('http://localhost:3000/public/DAG/')
+    let r =  axios.get('http://localhost:3000/public/DAGs/')
 
     r.then(response => {
-        
+        let a = response.data
+        console.log(a);
+    }).catch(error => {
+        console.log(error.response);
     })
 
 }
