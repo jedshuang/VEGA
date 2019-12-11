@@ -1,0 +1,186 @@
+body {
+    background-color: lightblue;
+    font-family: 'Times New Roman', sans-serif;
+}
+
+#main {
+    background-color: #FFFFFF;
+    width: 700px;
+    height: 800px;
+    margin: 7em auto;
+    border-radius: 1.5em;
+    box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+}
+
+.signIn {
+    text-align: center;
+    padding-top: 70px;
+    color: rgb(85, 116, 170);
+    font-family: 'Times New Roman', sans-serif;
+    font-weight: bold;
+    font-size: 45px;
+}
+
+#us {
+width: 76%;
+color: rgb(38, 50, 56);
+font-weight: 700;
+font-size: 18px;
+letter-spacing: 1px;
+background: rgba(136, 126, 126, 0.04);
+padding: 10px 20px;
+outline:none;
+border-radius: 20px;
+box-sizing: border-box;
+border: 2px solid rgba(0, 0, 0, 0.02);
+margin-bottom: 50px;
+margin-left: 95px;
+text-align: center;
+margin-bottom: 27px;
+font-family: 'Times New Roman', sans-serif;
+}
+
+.form1 {
+    padding-top: 0px;
+    
+}
+
+img{
+    margin-top: 0px;
+    opacity: 0.7;
+    width:300px;
+    height: 200px;
+    margin-left: 200px;
+}
+
+#ps {
+width: 76%;
+color: rgb(38, 50, 56);
+font-weight: 700;
+font-size: 18px;
+letter-spacing: 1px;
+background: rgba(136, 126, 126, 0.04);
+outline:none;
+padding: 10px 20px;
+border-radius: 20px;
+box-sizing: border-box;
+border: 2px solid rgba(0, 0, 0, 0.02);
+margin-left: 95px;
+text-align: center;
+margin-bottom: 47px;
+font-family: 'Times New Roman', sans-serif;
+}
+
+
+#us:focus, #ps:focus, .sup:focus, .nup:focus, .submit:focus{
+    border: 5px solid rgba(112, 161, 199, 0.872) ;
+    outline: none;
+}
+
+.submit {
+    cursor: pointer;
+    border-radius: 2em;
+    color:lightblue;
+    background: linear-gradient(to right, rgb(39, 105, 176), rgb(64, 148, 251));
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    font-family: 'Times New Roman', sans-serif;
+    margin-top: 30px;
+    margin-left: 180px;
+    font-size: 20px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+}
+
+.sup{
+    cursor: pointer;
+    border-radius: 2em;
+    color:lightblue;
+    background: linear-gradient(to right, rgb(64, 148, 251), rgb(39, 105, 176));
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    margin-left: 40px;
+    font-family: 'Times New Roman', sans-serif;
+    font-size: 20px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+    
+}
+
+.forgot {
+    text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
+    color: rgb(104, 122, 177);
+    padding-top: 15px;
+    padding-left: 35px;
+}
+
+.place{
+    width: 76%;
+    color: rgb(38, 50, 56);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 1px;
+    background: rgba(136, 126, 126, 0.04);
+    outline:none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    border: 2px solid rgba(0, 0, 0, 0.02);
+    margin-left: 95px;
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: 'Times New Roman', sans-serif;
+    }
+
+#passwordHeader{
+    font-size: 20px;
+    text-align: center;
+    margin-top: 5px;
+    padding-top: 6px;
+}
+
+#makeP{
+    background-color: rgba(177, 208, 245, 0.708);
+    width: 600px;
+    height: 170px;
+    margin: 7em auto;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+}
+
+.passwords{
+    width: 76%;
+    color: rgb(38, 50, 56);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 1px;
+    background: rgba(136, 126, 126, 0.04);
+    outline:none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    border: 2px solid rgba(0, 0, 0, 0.02);
+    margin-left: 75px;
+    text-align: center;
+    margin-bottom: 10px;
+    font-family: 'Times New Roman', sans-serif;
+}
+
+.nup{
+    cursor: pointer;
+    border-radius: 2em;
+    color:lightblue;
+    background: linear-gradient(to right, rgb(64, 148, 251), rgb(39, 105, 176));
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    margin-left: 263px;
+    font-family: 'Times New Roman', sans-serif;
+    font-size: 20px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+    
+}
