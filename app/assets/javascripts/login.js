@@ -41,19 +41,17 @@ export async function handleLogin(){
         r.then(response => {
            
             jwt = response.data.jwt;
-        
+            myStorage.clear();
             myStorage.setItem("jwt", jwt);
-            myStorage.setItem("username", us);
             
             alert("Succesfully signed in")
             location.href = "../../index.html"
 
-            
+            //get request from user git
 
-          }).then(response => alert(response.message)
-          ).catch(error => {
-            
-           if( $("#fail").length ==0 ){
+          }).catch(error => {
+            alert(error.response.data.msg);
+           if( $("#fail").length == 0 ){
             $base.children(".form1").prepend(`<p class = "wrong" id= "fail"> Username or Password is incorrect </p> `);
             
            } 
@@ -62,13 +60,14 @@ export async function handleLogin(){
 }
 
 export async function handlesignUp(){
-    //event.preventDefault();
+    event.preventDefault();
     let firstn = document.getElementById("place1").value;
     let lastn = document.getElementById("place2").value;
     let emails = document.getElementById("place3").value;
     let ps = document.getElementById("passwords").value;
     let psR = document.getElementById("passwordsR").value;
     let password = null;
+    let jwt = null;
     
     
     if(firstn == ''|| lastn == '' || emails == '' || ps == '' || psR == ''){
@@ -77,6 +76,7 @@ export async function handlesignUp(){
     }
 
     let name = firstn + "-" + lastn;
+
     if(ps !== psR){
         alert("Passwords do not match");
         document.getElementById("passwords").value = '';
@@ -96,17 +96,57 @@ export async function handlesignUp(){
             }
     });
     
-    result.then(response => {
-        console.log(response.status);
-      }).then(response => alert(response.msg)
-      ).catch(error => {
-        alert(error.response.data.msg);
+    result.then(async response => {
+        let r =  axios.post('http://localhost:3000/account/login',
+        {
+            name: name,
+            pass: password,
+        });
+
+        r.then(response => {
+            
+            console.log("hit");
+            jwt = response.data.jwt;
+            myStorage.clear();
+            console.log("YOOOOOO" + myStorage.length);
+            myStorage.setItem("jwt", jwt);
+            console.log("YOOOOOO" + myStorage.length);
+            alert("Succesfully signed in")
+       
+          })/*.then(async response => {
+            
+            let q =  axios.post('http://localhost:3000/user/',
+            {
+                [name]: {
+                    firstname: firstn,
+                    lastname: lastn,
+                    email: emails,
+                    DAGs: {},
+                }
+            }, {headers: { Authorization: "Bearer " + jwt }});
+            
+            q.then(response => {
+                console.log("we got here");
+                console.log(response);
+            }).catch(error =>{
+                console.log(jwt);
+                console.log("we actually got to this part my guy");
+                console.log(error.response);
+                
+            });
+            alert("ashhhhhh");
+        });
+          
+    */}).catch(error => {
+        let a = error;
+        alert(a);
         document.getElementById("place1").value = '';
         document.getElementById("place2").value = '';
         document.getElementById("place3").value = '';
         document.getElementById("passwords").value = '';
         document.getElementById("passwordsR").value = '';
       });
+
 }
 
 export const handlesignUpC = function(){
