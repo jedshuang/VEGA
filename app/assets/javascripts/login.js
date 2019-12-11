@@ -4,6 +4,7 @@ export const $base = $('#main');
 
 export let myStorage = window.localStorage;
 
+
 export async function loadSignIn(){
     
     $base.append(renderSignIn());
@@ -31,7 +32,7 @@ export async function handleLogin(){
     let us = document.getElementById("us").value;
     let ps = document.getElementById("ps").value;
 
-    let r = axios.post('http://localhost:3000/account/login',
+    let r =  axios.post('http://localhost:3000/account/login',
         {
             name: us,
             pass: ps,
@@ -40,14 +41,22 @@ export async function handleLogin(){
         r.then(response => {
            
             jwt = response.data.jwt;
-            console.log(jwt);
+        
             myStorage.setItem("jwt", jwt);
+            myStorage.setItem("username", us);
+            
             alert("Succesfully signed in")
-            console.log(myStorage.getItem("jwt"));
-          }).catch(error => {
+            location.href = "../../index.html"
+
             
-            $base.children(".after").append(`<p id= "fail"> Username or Password is incorrect </p> `)
+
+          }).then(response => alert(response.message)
+          ).catch(error => {
             
+           if( $("#fail").length ==0 ){
+            $base.children(".form1").prepend(`<p class = "wrong" id= "fail"> Username or Password is incorrect </p> `);
+            
+           } 
           });
     
 }
@@ -70,6 +79,8 @@ export async function handlesignUp(){
     let name = firstn + "-" + lastn;
     if(ps !== psR){
         alert("Passwords do not match");
+        document.getElementById("passwords").value = '';
+        document.getElementById("passwordsR").value = '';
         return;
     } else {
         password = ps;
@@ -82,14 +93,19 @@ export async function handlesignUp(){
             data: {
                 role: 'user',
                 email: emails,
-                DAG: null,
             }
     });
     
     result.then(response => {
-        console.log(response.data);
-      }).catch(error => {
-        console.log("Fuck");
+        console.log(response.status);
+      }).then(response => alert(response.msg)
+      ).catch(error => {
+        alert(error.response.data.msg);
+        document.getElementById("place1").value = '';
+        document.getElementById("place2").value = '';
+        document.getElementById("place3").value = '';
+        document.getElementById("passwords").value = '';
+        document.getElementById("passwordsR").value = '';
       });
 }
 

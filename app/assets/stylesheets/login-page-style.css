@@ -184,3 +184,10 @@ font-family: 'Times New Roman', sans-serif;
     box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
     
 }
+
+#fail{
+    font-size: 20px;
+    text-align: center;
+    color:red;
+    
+}   
