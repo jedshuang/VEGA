@@ -83,6 +83,16 @@ a{
     border-radius: 5px;
 }
 
+#logout-button{
+    margin-left: 130px;
+    height: 36px;
+    width: 120px;
+    background-color: lightblue;
+    font-size: 14px;
+    font-weight: bolder;
+    border-radius: 5px;
+}
+
 .selected{
     font-weight: bolder;
 }
@@ -118,4 +128,53 @@ a{
 .about-section{
     height: 200px;
     margin-left: 60px;
+}
+
+#searchbar{ 
+    width: 70%;
+    margin-left: 15%; 
+    padding:15px; 
+    border-radius: 10px; 
+    margin-top: 20px;
+} 
+
+input[type=text] { 
+    width: 30%; 
+    -webkit-transition: width 0.15s ease-in-out; 
+    transition: width 0.15s ease-in-out; 
+} 
+
+/* When the input field gets focus, 
+    change its width to 100% */
+input[type=text]:focus { 
+width: 70%; 
+} 
+
+#list{ 
+    font-size:  1.5em; 
+    margin-left: 90px; 
+} 
+
+.ui-helper-hidden-accessible{
+    display: none;
+}
+
+.ui-autocomplete{
+    background-color: lightsteelblue;
+
+    width: 70%;
+    font-size: 16px;
+    
+}
+
+.ui-menu-item{
+    margin: 12px;
+}
+
+
+#account-details{
+    width: 100%;
+    display: block;
+    
+
 }
