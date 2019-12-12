@@ -90,6 +90,30 @@ export async function handlesignUp(){
         password = ps;
     }
 
+   // grecaptcha.render("html_element", {"sitekey": "6Lf0U8cUAAAAAFJ4lIdRC62cM1_IlJS6OCXu2v2c", "theme": "light"});
+   // grecaptcha.reset();
+    let k = grecaptcha.getResponse();
+    console.log(k);
+
+    let captcha = axios.post('https://www.google.com/recaptcha/api/siteverify?secret='+'6Lf0U8cUAAAAAJrr5e2xrjqAA0pl62gGqfkRcQbS'+'&response=$'+k, {},{
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+      },
+    );
+    captcha.then(response => {
+        console.log("hit");
+        if(!response.data.success){
+            throw({
+                success: false,
+                error: 'response not valid'
+            })
+        }
+    }).catch(error => {
+        
+        return
+    })
+
     let result = axios.post('http://localhost:3000/account/create',
         {
             name: name,
