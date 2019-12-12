@@ -1,11 +1,25 @@
-function deleteFeedback(pathnamefeed, feedbackfeed){
+function deleteFeedback(pathnamefeed, feedbackfeed, list){
     let jwt = window.localStorage.getItem("jwt")
-    let r = axios.delete('http://localhost:3000/private/'+name,
-      {params: {pathname: pathnamefeed, feedback: feedbackfeed}},
+    let name = window.localStorage.getItem("username")
+
+    let del = axios.delete('http://localhost:3000/private/'+name,
       {headers: { Authorization: "Bearer " + jwt }})
+    // console.log(list)
+    let left = list.filter(function(obj){
+        return obj["pathname"] != pathnamefeed || obj["feedback"] != feedbackfeed;
+    })
+    // console.log(left)
+    let q = axios.post('http://localhost:3000/private/'+name,
+    {data: left, type: "merge"}, 
+    {headers: { Authorization: "Bearer " + jwt }})
+        // console.log(read)
+        // console.log(del)
+        // console.log(update)
     
-      updateFeedback()
-}
+    $("#feedback-table-body").empty()
+    updateFeedback()
+    };
+    
 
 
 
@@ -20,7 +34,7 @@ async function updateFeedback(){
 
         for (let i=0;i<response.data.result.length;i++) {
             let buttonid = "delete-feedback-button-"+i;
-            console.log(response.data.result[i])
+            // console.log(response.data.result[i])
             
             let feedback = response.data.result;
             console.log(i)
@@ -34,7 +48,7 @@ async function updateFeedback(){
             )
             
             $("#" + buttonid).on('click',function(){
-                deleteFeedback(feedback[i].pathname, feedback[i].feedback)
+                deleteFeedback(feedback[i].pathname, feedback[i].feedback, response.data.result)
         });
         }
     }).catch(error=>{
