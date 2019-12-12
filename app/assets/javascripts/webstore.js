@@ -8,7 +8,7 @@ export function leaveFeedback(path){
   if (jwt){
     let feedbacksentence = prompt("Please leave feedback on the "+path+" path!", "feedback...")
     let q = axios.post('http://localhost:3000/private/'+name,
-      { data: {feedback: feedbacksentence}}, 
+      {data: {pathname: path, feedback: feedbacksentence}, type: "merge"}, 
       {headers: { Authorization: "Bearer " + jwt }})
 
       q.then(response => {
