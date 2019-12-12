@@ -39,7 +39,7 @@ async function updatePaths(search){
       <tr>
           <th>`+r.data.result[path].name+`</th>
           <td>`+r.data.result[path].description+`</td>
-          <td>`+Math.round(Math.random(0,100)*100)+`</td>
+          <td>`+Math.round(Math.random(0,1000)*1000)+`</td>
           <td>`+r.data.result[path].maker+`</td>
           <td>2019</td> 
           <td><a href="#"><button class="feedback-button" id="`+buttonid+`">feedback</button></a></td>
@@ -70,7 +70,7 @@ async function changePathDisplay(search){
       <tr>
           <th>`+r.data.result[path].name+`</th>
           <td>`+r.data.result[path].description+`</td>
-          <td>`+Math.round(Math.random(0,100)*100)+`</td>
+          <td>`+Math.round(Math.random(0,1000)*1000)+`</td>
           <td>`+r.data.result[path].maker+`</td>
           <td>2019</td> 
           <td><a href="#"><button class="feedback-button" id="`+buttonid+`">feedback</button></a></td>
