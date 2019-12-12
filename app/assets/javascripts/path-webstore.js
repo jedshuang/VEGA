@@ -23,4 +23,10 @@ export async function grabDagTree() {
 }
 
 
+export async function userDuplicate() {
+
+    let r = axios.post('http://localhost:3000/users/', {})
+
+}
+
 

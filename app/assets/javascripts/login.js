@@ -102,42 +102,30 @@ export async function handlesignUp(){
             name: name,
             pass: password,
         });
+        
 
         r.then(response => {
             
-            console.log("hit");
             jwt = response.data.jwt;
             myStorage.clear();
-            console.log("YOOOOOO" + myStorage.length);
-            myStorage.setItem("jwt", jwt);
-            console.log("YOOOOOO" + myStorage.length);
-            alert("Succesfully signed in")
-       
-          })/*.then(async response => {
             
-            let q =  axios.post('http://localhost:3000/user/',
+            myStorage.setItem("jwt", jwt);
+           
+            alert("Succesfully signed in")
+            
+            let q = axios.post('http://localhost:3000/user/'+name,
             {
-                [name]: {
+                data: {
                     firstname: firstn,
                     lastname: lastn,
                     email: emails,
                     DAGs: {},
                 }
             }, {headers: { Authorization: "Bearer " + jwt }});
-            
-            q.then(response => {
-                console.log("we got here");
-                console.log(response);
-            }).catch(error =>{
-                console.log(jwt);
-                console.log("we actually got to this part my guy");
-                console.log(error.response);
-                
-            });
-            alert("ashhhhhh");
-        });
-          
-    */}).catch(error => {
+
+            location.href = "../../index.html"
+       
+          })}).catch(error => {
         let a = error;
         alert(a);
         document.getElementById("place1").value = '';
