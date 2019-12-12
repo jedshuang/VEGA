@@ -121,6 +121,10 @@ font-family: 'Times New Roman', sans-serif;
     padding-left: 35px;
 }
 
+#html_element{
+    padding-left:200px;
+}
+
 .place{
     width: 76%;
     color: rgb(38, 50, 56);

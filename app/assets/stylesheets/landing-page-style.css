@@ -54,7 +54,6 @@ a{
 }
 #blurb{
     width: 100%;
-    float:right;
     text-align: center;
 }
 #blurb > p{
@@ -70,7 +69,7 @@ a{
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
+    width: 80%;
 }
     
 #login-button{
@@ -97,20 +96,24 @@ a{
     font-weight: bolder;
 }
 
-.explore-button{
+.feedback-button{
     background-color: lightblue;
     border: 0px solid #b5b5b5;;
     border-radius: 5px;
     height: 22px;
     width: 80px;
 }
-.explore-button:hover{
+.feedback-button:hover{
     background-color: lightblue;
     border-radius: 5px;
     height: 22px;
     border-width: 2px;
 }
 #webstore-table{
+    margin: 20px;
+    width: 97%;
+}
+#feedback-table{
     margin: 20px;
     width: 97%;
 }
@@ -177,4 +180,14 @@ width: 70%;
     display: block;
     
 
+}
+
+#search-button{
+    background-color: lightblue;
+    height: 36px;
+    border-radius: 5px;
+} 
+
+#search-button:hover{
+    background-color: lightsteelblue;
 }

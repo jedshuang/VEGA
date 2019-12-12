@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>VEGA</title>    
+        <link rel="icon" href="../assets/images/smol-logo copy.png">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
         <link rel="stylesheet" href="../assets/stylesheets/landing-page-style.css"/>
     </head>
@@ -14,7 +15,9 @@
 
         <script src="../../node_modules/jquery/dist/jquery.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="../../node_modules/axios/dist/axios.min.js"></script>
         <script src="../assets/javascripts/index.js" type="module"></script>
+        <script src="../assets/javascripts/feedback.js" type="module"></script> 
         
         <div id="navbar">
             <a href="../../index.html">
@@ -23,8 +26,8 @@
             </a>
         
             <div id="nav-buttons">
-                <a href="./path-webstore.html"><button class="nav-butt"><bold>paths</bold></button></a>
-                <a href="app/views/login.html"><button class="button" id="login-button">login</button></a>
+                <a href="path-webstore.html"><button class="nav-butt"><bold>paths</bold></button></a>
+                <a href="login.html"><button class="button" id="login-button">login</button></a>
                 
             </div>
             <div id="nav-buttons">
@@ -34,8 +37,17 @@
             </div>
         </div>
 
-        <div class="feedback table">
-            
+        <div>
+            <table class="table is-fullwidth is-hoverable is-striped" id="feedback-table">
+                <thead>
+                        <th style="width: 300px;">Path</th>
+                        <th>Feedback</th>
+                        <th style="width: 200px;">Actions</th>
+                </thead>
+                <tbody id="feedback-table-body">
+        
+                </tbody>
+            </table>
         </div>
     </body>  
 </html>
