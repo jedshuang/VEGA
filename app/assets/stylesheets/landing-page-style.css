@@ -54,7 +54,6 @@ a{
 }
 #blurb{
     width: 100%;
-    float:right;
     text-align: center;
 }
 #blurb > p{
@@ -70,7 +69,7 @@ a{
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
+    width: 80%;
 }
     
 #login-button{
