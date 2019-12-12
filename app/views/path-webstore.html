@@ -18,6 +18,7 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="../assets/javascripts/webstore.js" type="module"></script> 
         <script src="../../node_modules/axios/dist/axios.min.js"></script>
+        <script src="../assets/javascripts/index.js" type="module"></script>
         
         <div id="navbar">
             <a href="../../index.html">
@@ -33,13 +34,14 @@
             <div id="nav-buttons">
                 <a href="about.html"><button class="nav-butt">about</button></a>
                 <a href="faq.html"><button class="nav-butt">FAQ</button></a>
-                <a href="examples.html"><button class="nav-butt">examples</button></a>
+                <a href="feedback.html"><button class="nav-butt">feedback</button></a>
             </div>
         </div>
 
         <div id="search-bar">
             <input id="searchbar" type="text"
             name="search" placeholder="Explore paths..." autocomplete="off"> 
+            <button class="small-button" id="search-button">Search</button>
         </div>
 
         <table class="table is-fullwidth is-hoverable is-striped" id="webstore-table">
@@ -51,17 +53,9 @@
                 <th>Discovered on</th>
                 <th></th>
             </thead>
-            <tbody>
-                <tr>
-                    <th>Download VSCode</th>
-                    <td>A guide to downloading vscode on your own machine!</td>
-                    <td>3</td>
-                    <td>VEGA Team</td>
-                    <td>2019</td> 
-                    <td><a href="#"><button class="explore-button">explore</button></a></td>
-                </tr>
-                <tr>
-                    <th>Making a youtube playlist</th>
+            <tbody id="webstore-table-body">
+                <!-- <tr> -->
+                    <!-- <th>Making a youtube playlist</th>
                     <td>Learn how to link your favorite radiohead songs</td>
                     <td>567</td>
                     <td>Shai</td>
@@ -147,7 +141,7 @@
                     <td>COMP401 Team</td>
                     <td>2010</td> 
                     <td><a href="#"><button class="explore-button">explore</button></a></td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
     </body>  
