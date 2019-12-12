@@ -44,7 +44,8 @@ export async function handleLogin(){
             jwt = response.data.jwt;
             myStorage.clear();
             myStorage.setItem("jwt", jwt);
-            myStorage.setItem("username", name);
+            console.log(us);
+            myStorage.setItem("username", us);
             myStorage.setItem("role", response.data.role);
             
             alert("Succesfully signed in")
@@ -135,7 +136,7 @@ export async function handlesignUp(){
             
             jwt = response.data.jwt;
             myStorage.clear();
-            
+            console.log(name);
             myStorage.setItem("jwt", jwt);
             myStorage.setItem("username", name);
             myStorage.setItem("role", response.data.role);
