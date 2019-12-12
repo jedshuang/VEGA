@@ -17,6 +17,7 @@ $(function() {
             localStorage.removeItem('jwt');
             localStorage.removeItem('username');
         }
+
         $("#logout-button").replaceWith('<a href="#"><button class="button" id="login-button">login</button></a>')
     });
 
