@@ -18,6 +18,7 @@ export async function signUpFormRender() {
 
     $base.children(".signIn").replaceWith(`<p class="signIn">Sign Up</p>`);
     $base.children(".form1").replaceWith(renderSignUp());
+    
 
     $(".nup").on('click', (e) => {
         e.preventDefault();
@@ -43,6 +44,8 @@ export async function handleLogin(){
             jwt = response.data.jwt;
             myStorage.clear();
             myStorage.setItem("jwt", jwt);
+            myStorage.setItem("username", name);
+            myStorage.setItem("role", response.data.role);
             
             alert("Succesfully signed in")
             location.href = "../../index.html"
@@ -91,7 +94,7 @@ export async function handlesignUp(){
             name: name,
             pass: password,
             data: {
-                role: 'user',
+                role: 2,
                 email: emails,
             }
     });
@@ -110,6 +113,8 @@ export async function handlesignUp(){
             myStorage.clear();
             
             myStorage.setItem("jwt", jwt);
+            myStorage.setItem("username", name);
+            myStorage.setItem("role", response.data.role);
            
             alert("Succesfully signed in")
             
@@ -143,8 +148,6 @@ export const handlesignUpC = function(){
     loadSignIn();
 }
 
-
-
 $(function() {
     loadSignIn();
 });
@@ -162,17 +165,27 @@ export const renderSignIn = function() {
           </form>`
 }
 export const renderSignUp = function() {
-    return `<form onsubmit="return false;" id = "form1" class="form1">
+    return `
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script>
+    <form onsubmit="return false;" id = "form1" class="form1">
     <input id="place1" class = "place" type="text" placeholder="First Name">
     <input id="place2" class = "place" type="text" placeholder="Last Name">
     <input id="place3" class = "place" type= "text" placeholder="Email">
+    <form action="?" method="POST">
+      <div id="html_element"></div>
+    </form>
     <div id = "makeP">
     <p id= "passwordHeader"> Your password must be 4 characters long</p>
     <input id="passwords" class= "passwords" type= "text" placeholder="Password">
     <input id="passwordsR" class= "passwords" type= "text" placeholder="Re-Enter Password">
     </div>
+
     <div id = "buttons">
         <button class ="nup" type='button' > Sign up</button>
         <button class ="cup" type='button' > Cancel</button>
-    </div>`
+    </div>
+
+    `
 }

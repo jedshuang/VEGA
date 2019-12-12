@@ -7,16 +7,22 @@
 
         <title>User Login</title>    
         <link rel="stylesheet" href="../assets/stylesheets/login-page-style.css">
-
-
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <script type="text/javascript">
+          var onloadCallback = function() {
+            grecaptcha.render('html_element',{
+              'sitekey' : '6Lf0U8cUAAAAAFJ4lIdRC62cM1_IlJS6OCXu2v2c'
+            });
+          };
+        </script>
     </head>
 
     <body>
         <div id="main">
           <p class="signIn">Sign In</p>
           <img src="../assets/images/vega-logo-black.svg" class = "logo-head" id="logo-head">
-          
-        </form>
+        
+        
         </div>
           <script src="../../node_modules/jquery/dist/jquery.js"></script>
           <script src="../../node_modules/axios/dist/axios.min.js"></script>
