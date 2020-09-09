@@ -11,8 +11,8 @@
 2. Select 'New Recording'
 3. Title your recording
 4. For each item you wish to record do the following:
-- Navigate to the desired webpage
-- Mouse over the element that needs to be interacted with.
-- Press 'Ctrl + q' to open the recording menu
-- Give your item a title and description, then click save.
+    - Navigate to the desired webpage
+    - Mouse over the element that needs to be interacted with.
+    - Press 'Ctrl + q' to open the recording menu
+    - Give your item a title and description, then click save.
 5. When you are done, click the VEGA chrome extension icon and click 'Finish Recording'.
