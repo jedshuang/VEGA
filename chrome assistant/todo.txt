@@ -1,0 +1,18 @@
+[x] cancel button for creating new Node
+[ ] add new popup pages:
+    [x] load -> load resource by id
+    [x] new -> start recording -> recording tracker?
+        [ ] clear becomes a subset of the record tracker
+    [ ] show num of steps during tutorial creation in popup
+[ ] fix infinite scrolling when dragging the new node box
+[ ] make a tutorial to show how to use our website
+    [ ] show how to edit the path/DAG
+[ ] recording.html
+    [x] add a finsh button to push new tutorial to the server
+    [x] make finish button send recording to the datastore
+[ ] load_recording.html
+    [ ] id lookup should make a get request to the server
+[ ] show 
+[x] add logo
+[ ] show title and description box when loading records
+[ ] SAVE description as entered_text in creating new node

@@ -1,0 +1,28 @@
+{
+    "name": "VEGA",
+    "description": "Hightlight elements on the page and chain them into integrated web tutorials.",
+    "version": "0.1",
+    "permissions": [
+    "tabs","<all_urls>","background"
+    ],
+    "browser_action": {
+        "default_icon": "./assets/img/vega-logo-black.png",
+        "default_popup": "./html/popup.html"
+    },
+
+    "content_scripts": [
+        {
+        "matches": [
+            "http://*/*",
+            "https://*/*"
+            ],
+        "js": ["./assets/js/graphlib.min.js", "./assets/js/jquery.js", "./assets/js/jquery-ui.js", "./extension_scripts/content_scripts/draggable.js", "./extension_scripts/content_scripts/main.js"],
+        "run_at": "document_end"       
+        }
+    ], 
+    "background": {
+        "scripts": ["./assets/js/axios.min.js", "./assets/js/graphlib.min.js", "./assets/js/jquery.js", "./extension_scripts/background/background.js", "./extension_scripts/background/recording_state.js"]
+    },
+    "manifest_version":2
+}
+
