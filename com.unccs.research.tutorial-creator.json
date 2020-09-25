@@ -1,0 +1,9 @@
+{
+  "name": "com.unccs.research.tutorial-creator.json",
+  "description": "Chrome Native Messaging Host for Tutorial Creator",
+  "path": "HOST_PATH",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://aioiakonngdjmbmiaedohmknlbiejmeb/"
+  ]
+}

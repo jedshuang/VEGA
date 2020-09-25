@@ -16,3 +16,54 @@
     - Press 'Ctrl + q' to open the recording menu
     - Give your item a title and description, then click save.
 5. When you are done, click the VEGA chrome extension icon and click 'Finish Recording'.
+
+# Tutorial Creator (Apollo)
+
+A command line interface for students to load a tutorial file and go through the tutorial.
+Integrate with this [chrome plugin](https://github.com/aaachen/chrome-assistant)
+
+### Installation
+
+```bash
+chmod +x install.sh
+./install.sh
+```
+
+### Configuring Server
+
+If `tutservd.json` does not specify the path for `tutorial-home`, server would look for tutorials stored at the path `$TUTORIAL_HOME/tutorials`
+
+### Using apollo client
+
+apollo client expects the server to run at localhost and the port specified in `tutservd.json`
+
+```bash
+$ apollo 
+
+Usage: <main class> [command] [command options]
+  Commands:
+    load      load an existing tutorial file
+      Usage: load [options] JSON tutorial file
+        Options:
+          -h, --help
+
+
+    start      null
+      Usage: start [options]
+        Options:
+          -h, --help
+
+
+    next      null
+      Usage: next [options]
+        Options:
+          -h, --help
+
+
+    perform      null
+      Usage: perform [options]
+        Options:
+          -h, --help
+
+```
+ 

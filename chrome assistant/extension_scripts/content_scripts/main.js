@@ -514,8 +514,8 @@ function createAdvanceLinkButton(){
             student_view = 'null';
     }
     student_view = $(`<div id='student_view'></div>`);
-    let student_view_next = $('<a id = "fjh43jfb" href="#">Next</a>');
-    let student_view_prev = $('<a id = "fjh43jfb" href="#">Prev</a>');
+    let student_view_next = $('<a id = "student_view_next" href="#">Next</a>');
+    let student_view_prev = $('<a id = "student_view_prev" href="#">Prev</a>');
     student_view_prev.appendTo(student_view);
     student_view_next.appendTo(student_view);
 

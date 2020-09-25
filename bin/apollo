@@ -1,0 +1,3 @@
+#!/bin/sh
+
+java -jar "$APOLLO/bin/apollo.jar" "$@"
