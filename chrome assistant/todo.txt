@@ -7,12 +7,34 @@
 [ ] fix infinite scrolling when dragging the new node box
 [ ] make a tutorial to show how to use our website
     [ ] show how to edit the path/DAG
-[ ] recording.html
+[x] recording.html
     [x] add a finsh button to push new tutorial to the server
     [x] make finish button send recording to the datastore
-[ ] load_recording.html
-    [ ] id lookup should make a get request to the server
+[x] load_recording.html
+    [x] id lookup should make a get request to the server
 [ ] show 
 [x] add logo
 [ ] show title and description box when loading records
-[ ] SAVE description as entered_text in creating new node
+[x] SAVE description as entered_text in creating new node
+
+10/22/2020
+[x] create command strings in a constants file
+[x] replace all commands with COMMANDS constant
+[ ] convert messaging from commands to a file with messaging functions
+[x] get access to ibm cloud storage repo
+[ ] post tutorial to ibm cloud database
+[ ] load tutorial from ibm cloud database
+
+10/24/2020
+[x] load one record after another was loaded. // First place to look is gonna be the set-load-status
+[ ] add recording icon when currently recording a tutorial
+[ ] add an interface once a record is loaded to the popup
+    [ ] popup title: DAG.tutorial_name
+    [ ] stop button
+
+[ ] add a publish page to the popup when a user clicks finish recording
+
+10/25/2020
+[x] fix bug: cannot reload a tutorial while on the same page, student view will not be created.
+[x] implement a firebase backend
+[ ] remove border from highlighted element when loading the next element if its on the same page.

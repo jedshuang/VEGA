@@ -14,14 +14,14 @@ $(window).mouseover(function(e) {
 });
 
 
-var student_view = "null";
+var student_view = null;
 //This message asks the background if you are in "load mode"<p>Since the index is zero-based, the first list item is returned:</p>
 
 $(document).ready(function() {
     retrieveItemfromBackgroundScript();
     
     //Needs to retrieve ephermal background state
-    chrome.runtime.sendMessage({command: "get_recording_state"}, function(response) {
+    chrome.runtime.sendMessage({command: COMMANDS.GETRECORDINGSTATE}, function(response) {
         //sends a message to the recording_content_state, which turns off
         if(response.state == true){
             document.addEventListener("keydown", detect_element_selection);
@@ -32,7 +32,7 @@ $(document).ready(function() {
 });
 
 function retrieveItemfromBackgroundScript(){
-      chrome.runtime.sendMessage({command: "get-load-status"}, function(response) {
+      chrome.runtime.sendMessage({command: COMMANDS.GETLOADSTATUS}, function(response) {
         /*
             response from background script:
             response = true or false
@@ -41,7 +41,7 @@ function retrieveItemfromBackgroundScript(){
             if(response == false){
                 console.log("Not in load mode");
             }else{
-                createAdvanceLinkButton();
+                createTutorialControlInterface();
                 //Message asks background if you are on the correct link
                 get_dag(function(tutorial){
                     //If urls match, load the html 
@@ -179,14 +179,14 @@ function create_popup_box(top, left, borderedElement, popup_ID) {
     $(title).click(function(){
         $(title).focus();
     });
-    //Hanldes the click function for newly created save button
+    //Handles the click function for newly created save button
     $(saveButton).click(function(){
         //When you click the save button, this reverts the green block of text back to normal. 
         if(unborderedElementPointerHTML!=null) {
             //This replace with function, removes the element with the green border if one already exists. 
             $(elementOnMouseOver).replaceWith($(unborderedElementPointerHTML).prop('outerHTML'));
         }
-        chrome.runtime.sendMessage({command: "record_action", html:unborderedElementPointerHTML, entered_text:$(description).val(), title_text:$(title).val(), url:window.location["href"]}, 
+        chrome.runtime.sendMessage({command: COMMANDS.RECORDACTION, html:unborderedElementPointerHTML, entered_text:$(description).val(), title_text:$(title).val(), url:window.location["href"]}, 
             function(response) {
                 //    alert(response.msg +" : "+ response.enteredText + " : "+ window.location["href"]);
             });
@@ -464,15 +464,20 @@ chrome.runtime.onMessage.addListener(
       console.log("message received in main");
       console.log(request.command);
       switch(request.command){
-        case "load":
+        case COMMANDS.LOAD:
             console.log("load message received");
-            if(student_view != "null"){
-                console.log("not null");
-                student_view.remove();
-                student_view = "null";
-                sendResponse("Action completed");
-            }
-            //If urls match, load the html 
+            // if(student_view != "null"){
+            //     console.log("not null");
+            //     student_view.remove();
+            //     student_view = "null";
+            //     sendResponse("Action completed");
+            // }
+            deleteTutorialControlInterface();
+
+            chrome.runtime.sendMessage({command: COMMANDS.SETLOADSTATUS, value: true}, function(response) {
+                console.log("Setting load status to: " + response);
+            });
+            //If urls don't match, go to url. Then, load the tutorial html 
             get_dag(function(tutorial){
                 console.log(tutorial);
                 // console.log(tutorial.toJSON());
@@ -480,39 +485,47 @@ chrome.runtime.onMessage.addListener(
                     //Message asks background for html and moves to next item. 
                     window.location = get_current_node(tutorial).url;
                 }//end of null check
+                else {
+                    location.reload();
+                }
                 loadHTMLContent(tutorial);
+                createTutorialControlInterface();
             });
 
-            chrome.runtime.sendMessage({command: "set-load-status"}, function(response) {
-                console.log("Setting load status to: " + response);
-            });
-            retrieveItemFromBackgroundScript();
+            
+            // retrieveItemFromBackgroundScript();
             // createAdvanceLinkButton();
             sendResponse("Action completed");
 
             break;
         
-        case "enable_hot_key":
+        case COMMANDS.ENABLE_HOT_KEY:
             document.addEventListener("keydown", detect_element_selection);
             sendResponse({msg: "enabled Ctrl+Q"});
             break;
-        case "disable_hot_key":
+        case COMMANDS.DISABLE_HOT_KEY:
             document.removeEventListener("keydown", detect_element_selection);
             sendResponse({msg: "disabled Ctrl+Q"});
             break;
-        case "get_auth":
+        case COMMANDS.GET_AUTH:
             let myStorage = window.localStorage;
             let jwt = myStorage.getItem("jwt");
             console.log(jwt);
+        case COMMANDS.REMOVE_INTERFACE:
+            deleteTutorialControlInterface();
       }
 });
-
-function createAdvanceLinkButton(){
+/**
+ * This function creates the prev and next buttons for the in page tutorial controls.
+ */
+function createTutorialControlInterface(){
     //Removes the next button if it already exists
-    if(student_view != "null"){
-            student_view.remove();
-            student_view = 'null';
-    }
+    // if(student_view != "null"){
+    //         student_view.remove();
+    //         student_view = 'null';
+    // }
+    deleteTutorialControlInterface();
+
     student_view = $(`<div id='student_view'></div>`);
     let student_view_next = $('<a id = "student_view_next" href="#">Next</a>');
     let student_view_prev = $('<a id = "student_view_prev" href="#">Prev</a>');
@@ -555,6 +568,13 @@ function createAdvanceLinkButton(){
 
 }
 
+function deleteTutorialControlInterface() {
+    if(student_view != null) {
+        student_view.remove();
+        student_view = null;
+    }
+}
+
 /*
 * Functions for accessing members of the tutorial object.
 */
@@ -571,7 +591,7 @@ function get_current_node(tutorial){
 
 //This is an asynchronous function
 function get_dag(callback){
-    chrome.runtime.sendMessage({command: "peek"}, function(response) {
+    chrome.runtime.sendMessage({command: COMMANDS.PEEK}, function(response) {
         var current_tutorial = JSON.parse(response.tutorial);
         current_tutorial.DAG = graphlib.json.read(current_tutorial.DAG); 
        callback(current_tutorial);
@@ -591,7 +611,7 @@ function get_next_node(tutorial, callback){
    }
    else {
    var next_id = tutorial.DAG.outEdges(tutorial.current_node_id)[0].w;
-    chrome.runtime.sendMessage({command: "get_next", next_id:next_id}, function(response) {
+    chrome.runtime.sendMessage({command: COMMANDS.GETNEXT, next_id:next_id}, function(response) {
         callback(response);
     });
     }
@@ -609,7 +629,7 @@ function get_prev_node(tutorial, callback){
    }
    else{
    var prev_id = tutorial.DAG.inEdges(tutorial.current_node_id)[0].v;
-    chrome.runtime.sendMessage({command: "get_prev", prev_id:prev_id}, function(response) {
+    chrome.runtime.sendMessage({command: COMMANDS.GETPREV, prev_id:prev_id}, function(response) {
         callback(response);
     });
     }

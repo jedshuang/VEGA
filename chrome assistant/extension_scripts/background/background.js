@@ -56,7 +56,7 @@ function getOutEdges(tutorial, node_id){ /*Input: String */
   return string_edges; /* Output: Array of String node ids */
 }
 function sendUpdateMessage() {
-  chrome.runtime.sendMessage({command: "update_tutorial", 'tutorial': tutorial}, function(response) {
+  chrome.runtime.sendMessage({command: COMMANDS.UPDATETUTORIAL, 'tutorial': tutorial}, function(response) {
     //sends a message to the recording_content_state, which sets the tutorial name
     });
 }
@@ -82,7 +82,7 @@ chrome.runtime.onMessage.addListener(
                 "from a content script:" + sender.tab.url :
                 "from the extension");
     switch(request.command){
-        case "loadNew":
+        case COMMANDS.LOADRECORD:
           console.log(request);
           tutorial.DAG = graphlib.json.read(request.DAG);
           tutorial.current_node_id = request.id;
@@ -90,18 +90,18 @@ chrome.runtime.onMessage.addListener(
           tutorial.tutorial_name = request.tutorial_name;
           tutorial.description = request.description;
           console.log(tutorial);
-        case "updateTitleDesc": 
+        case COMMANDS.UPDATETITLEDESC: 
           console.log("updateTitleDesc: " + request.tutorial_name + "\n" + tutorial.description);
           tutorial.tutorial_name = request.tutorial_name;
           tutorial.description = request.description;
           sendResponse({msg: "adding name", tutorial:exportDAG(tutorial)});  
           break;
             
-        case "peek": 
+        case COMMANDS.PEEK: 
           sendResponse({msg: "Background: sending over entire DAG", tutorial:JSON.stringify(tutorial)});  
           break;
 
-        case "get_next":
+        case COMMANDS.GETNEXT:
           if(typeof tutorial.DAG.node(request.next_id) == "undefined" ){
             sendResponse({msg: "Out of steps!", tutorial:null});  
             break;
@@ -111,7 +111,7 @@ chrome.runtime.onMessage.addListener(
           
           break;
 
-        case "get_prev":
+        case COMMANDS.GETPREV:
           console.log("Prev button clicked");
           if(typeof tutorial.DAG.node(request.prev_id) == "undefined" ){
             sendResponse({msg: "Out of steps!", tutorial:null});  
@@ -122,11 +122,11 @@ chrome.runtime.onMessage.addListener(
           
           break;
 
-        case "get_options":
+        case COMMANDS.GETOPTIONS:
           console.log("Get options called");
           break;
         //This case is only used when recording steps. Adds a step to tutorial.
-        case "record_action":
+        case COMMANDS.RECORDACTION:
           console.log("Record action called");
           insertNewNode(tutorial, new Node(request.title_text, request.url, request.entered_text, request.html));
           sendResponse({msg: "Background: Message received", enteredText:request.entered_text});
@@ -134,7 +134,7 @@ chrome.runtime.onMessage.addListener(
           break;
 
         //Sends the tutorial object to the content script
-        case "save":
+        case COMMANDS.SAVE:
           console.log("Save hit");
           //When the tutorial s the current node id is set to the root node ID to be the starting place. 
           tutorial.current_node_id = tutorial.root_node_id;
@@ -150,6 +150,19 @@ chrome.runtime.onMessage.addListener(
           //   }
 
           // });
+          var data = {};
+          data[tutorial.tutorial_name] = {
+            name: tutorial.tutorial_name,
+            description: tutorial.description,
+            root_node_id: tutorial.root_node_id,
+            maker: "VEGA",
+            DAG: exportDAG(tutorial),
+            date: "2019"
+            
+          };
+          console.log(data);
+          postToDatabase(data);
+
           let r = await axios({
             url: `http://localhost:3000/public/DAGs/${tutorial.tutorial_name}`,
             method: "post",
@@ -176,18 +189,26 @@ chrome.runtime.onMessage.addListener(
           break; 
 
         //Deletes the recording
-        case "clear":
-          console.log("Background script: clicked clear button");
+        case COMMANDS.CLEAR:
+          // console.log("Background script: clicked clear button");
           tutorial = new recording();
+          // load_status = false;
+          /**
+           * tutorial blank
+           * load_status
+           */
           sendResponse("Clear complete");
           break; 
-        
-        case "get-load-status":
+        case COMMANDS.RESET:
+          tutorial = new recording();
+          load_status = false;
+          break;
+        case COMMANDS.GETLOADSTATUS:
           sendResponse(load_status);
           break; 
 
-        case "set-load-status":
-        load_status = !load_status;
+        case COMMANDS.SETLOADSTATUS:
+          load_status = request.value;
           sendResponse(load_status);
           break;
         // case "get_recording_state":

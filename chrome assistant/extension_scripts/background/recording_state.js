@@ -16,17 +16,17 @@ chrome.runtime.onMessage.addListener(
                   "from the extension");
         console.log(request);
       switch(request.command){
-          case "start_recording": 
+          case COMMANDS.STARTRECORDING: 
           recording_enabled = true;
           console.log("background: start_recording received");
           sendResponse({msg: "recording state changed to enabled"});  
           break;
 
-          case "end_recording":
+          case COMMANDS.ENDRECORDING:
           recording_enabled = false;
           sendResponse({msg: "recording state changed to disabled"});
 
-          case "get_recording_state":
+          case COMMANDS.GETRECORDINGSTATE:
           sendResponse({state:recording_enabled});
           break;
           default: 
