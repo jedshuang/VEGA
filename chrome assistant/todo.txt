@@ -38,3 +38,6 @@
 [x] fix bug: cannot reload a tutorial while on the same page, student view will not be created.
 [x] implement a firebase backend
 [ ] remove border from highlighted element when loading the next element if its on the same page.
+
+10/26/2020
+[x] added loaded_recording.html which shows the currently loaded tutorial and enables quitting the tutorial.

@@ -90,6 +90,7 @@ chrome.runtime.onMessage.addListener(
           tutorial.tutorial_name = request.tutorial_name;
           tutorial.description = request.description;
           console.log(tutorial);
+          break;
         case COMMANDS.UPDATETITLEDESC: 
           console.log("updateTitleDesc: " + request.tutorial_name + "\n" + tutorial.description);
           tutorial.tutorial_name = request.tutorial_name;
@@ -99,6 +100,7 @@ chrome.runtime.onMessage.addListener(
             
         case COMMANDS.PEEK: 
           sendResponse({msg: "Background: sending over entire DAG", tutorial:JSON.stringify(tutorial)});  
+          // sendResponse({msg: "Background: sending over entire DAG", tutorial:tutorial.toJSON()});  
           break;
 
         case COMMANDS.GETNEXT:
@@ -163,21 +165,21 @@ chrome.runtime.onMessage.addListener(
           console.log(data);
           postToDatabase(data);
 
-          let r = await axios({
-            url: `http://localhost:3000/public/DAGs/${tutorial.tutorial_name}`,
-            method: "post",
-            data: {data:{
+          // let r = await axios({
+          //   url: `http://localhost:3000/public/DAGs/${tutorial.tutorial_name}`,
+          //   method: "post",
+          //   data: {data:{
               
-              name: tutorial.tutorial_name,
-              description: tutorial.description,
-              root_node_id: tutorial.root_node_id,
-              maker: "VEGA",
-              DAG: exportDAG(tutorial),
-              date: "2019"
+          //     name: tutorial.tutorial_name,
+          //     description: tutorial.description,
+          //     root_node_id: tutorial.root_node_id,
+          //     maker: "VEGA",
+          //     DAG: exportDAG(tutorial),
+          //     date: "2019"
             
-            }},
-            type: "merge"
-          })
+          //   }},
+          //   type: "merge"
+          // })
           // r.then(response => {
           //   console.log(response);
           // }).catch(error => {
@@ -202,6 +204,7 @@ chrome.runtime.onMessage.addListener(
         case COMMANDS.RESET:
           tutorial = new recording();
           load_status = false;
+          console.log(tutorial);
           break;
         case COMMANDS.GETLOADSTATUS:
           sendResponse(load_status);

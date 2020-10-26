@@ -480,6 +480,7 @@ chrome.runtime.onMessage.addListener(
             //If urls don't match, go to url. Then, load the tutorial html 
             get_dag(function(tutorial){
                 console.log(tutorial);
+                console.log(get_current_node(tutorial).url); 
                 // console.log(tutorial.toJSON());
                 if(window.location["href"] != get_current_node(tutorial).url) {
                     //Message asks background for html and moves to next item. 
@@ -511,8 +512,11 @@ chrome.runtime.onMessage.addListener(
             let myStorage = window.localStorage;
             let jwt = myStorage.getItem("jwt");
             console.log(jwt);
+            break;
         case COMMANDS.REMOVE_INTERFACE:
             deleteTutorialControlInterface();
+            // location.reload();
+            break;
       }
 });
 /**
