@@ -190,6 +190,9 @@ chrome.runtime.onMessage.addListener(
         load_status = !load_status;
           sendResponse(load_status);
           break;
+        case "connect":
+          connect();
+          break;
         // case "get_recording_state":
         //   return sendResponse({state: recording_state});
         // case "set_recording_state":
@@ -200,3 +203,30 @@ chrome.runtime.onMessage.addListener(
 
 
   });
+
+  var port = null;
+
+  function connect() {
+    var hostName = "com.unccs.research.tutorial_creator";
+    // var hostName = "com.google.chrome.example.echo";
+    //appendMessage("Connecting to native messaging host <b>" + hostName + "</b>")
+    port = chrome.runtime.connectNative(hostName);
+    port.onMessage.addListener(onNativeMessage);
+    port.onDisconnect.addListener(onDisconnected);
+    console.log("Connecting to native messaging host");
+    var message = {"message": "Successfully received message from host!"};
+    port.postMessage(message);
+    // updateUiState();
+  }
+
+  function onNativeMessage(message) {
+    //appendMessage("Received message: <b>" + JSON.stringify(message) + "</b>");
+    console.log(JSON.stringify(message));
+  }
+  
+  function onDisconnected() {
+    //appendMessage("Failed to connect: " + chrome.runtime.lastError.message);
+    port = null;
+    console.log("Failed to connect: " + chrome.runtime.lastError.message);
+    // updateUiState();
+  }

@@ -3,7 +3,7 @@
     "description": "Hightlight elements on the page and chain them into integrated web tutorials.",
     "version": "0.1",
     "permissions": [
-    "tabs","<all_urls>","background"
+    "tabs","<all_urls>","background","nativeMessaging"
     ],
     "browser_action": {
         "default_icon": "./assets/img/vega-logo-black.png",

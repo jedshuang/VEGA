@@ -65,6 +65,13 @@ $( document ).ready(function() {
 		});
 		
 	});
+	$("#connect").on("click", function(){
+		console.log("connect click");
+		chrome.runtime.sendMessage({command: "connect"}, function(response) {
+			console.log("Connect message sent");
+		});
+		
+	});
 	// //Clear button clears list
 	// $("#clear_record").click(function(){
 	// 	//send data to server
