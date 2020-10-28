@@ -16,13 +16,14 @@
             "http://*/*",
             "https://*/*"
             ],
-        "js": ["./assets/js/graphlib.min.js", "./assets/js/jquery.js", "./assets/js/jquery-ui.js", "./extension_scripts/content_scripts/draggable.js", "./extension_scripts/content_scripts/main.js"],
+        "js": ["./assets/js/graphlib.min.js", "./assets/js/jquery.js", "./assets/js/jquery-ui.js", "./extension_scripts/constants.js", "./extension_scripts/content_scripts/draggable.js", "./extension_scripts/content_scripts/main.js"],
         "run_at": "document_end"       
         }
     ], 
     "background": {
-        "scripts": ["./assets/js/axios.min.js", "./assets/js/graphlib.min.js", "./assets/js/jquery.js", "./extension_scripts/background/background.js", "./extension_scripts/background/recording_state.js"]
+        "scripts": ["./assets/js/axios.min.js", "./assets/js/graphlib.min.js", "./assets/js/jquery.js", "./assets/js/firebase.js", "./extension_scripts/rest.js", "./extension_scripts/constants.js", "./extension_scripts/background/background.js", "./extension_scripts/background/recording_state.js"]
     },
+    "content_security_policy": "script-src 'self' blob: filesystem:; object-src 'self'",
     "manifest_version":2
 }
 

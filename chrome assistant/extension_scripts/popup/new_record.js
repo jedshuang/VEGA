@@ -1,6 +1,6 @@
 $( document ).ready(function() {/*load data from background script*/
     // $("#startR").prop('disabled', $("#formName").val().length == 0 ? true : false );
-    chrome.runtime.sendMessage({command: "get_recording_state"}, function(response) {
+    chrome.runtime.sendMessage({command: COMMANDS.GETRECORDINGSTATE}, function(response) {
         //sends a message to the recording_content_state, which turns off
         if(response.state == true){
             // $("#endR").prop('disabled', false);
@@ -43,16 +43,16 @@ $("#startR").on("click", function(){
         // //sends a message to the recording_content_state, which turns on the 
         // //hotkey listener
         // });
-        chrome.runtime.sendMessage({command: "updateTitleDesc", tutorial_name: $("#form input").val(), description: ""}, function(response) {
+        chrome.runtime.sendMessage({command: COMMANDS.UPDATETITLEDESC, tutorial_name: $("#form input").val(), description: ""}, function(response) {
             //sends a message to the recording_content_state, which sets the tutorial name
             console.log("Received: " + $("#formName").value);
             });
-        chrome.runtime.sendMessage({command: "start_recording"}, function(response) {
+        chrome.runtime.sendMessage({command: COMMANDS.STARTRECORDING}, function(response) {
                 //sends a message to the recording_content_state, which sets the tutorial name
                 // console.log("Received: " + $("#formName").value);
         });
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, {command: "enable_hot_key"}, function(responsee) {
+            chrome.tabs.sendMessage(tabs[0].id, {command: COMMANDS.ENABLE_HOT_KEY}, function(responsee) {
                 console.log("Enable hot key returns: "+ responsee);
             });
         });
@@ -70,16 +70,16 @@ $("#endR").on('click', function(){
     console.log("endR click");
     $(this).prop('disabled', true);
     $("#startR").prop('disabled', false);
-    chrome.runtime.sendMessage({command: "end_recording"}, 
+    chrome.runtime.sendMessage({command: COMMANDS.ENDRECORDING}, 
     function(response) {
     //sends a message to the recording_content_state, which turns off
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {command: "disable_hot_key"}, function(responsee) {
+                chrome.tabs.sendMessage(tabs[0].id, {command: COMMANDS.DISABLE_HOT_KEY}, function(responsee) {
                   console.log(responsee);
                 });
           });
     });
-    chrome.runtime.sendMessage({command: "save"}, 
+    chrome.runtime.sendMessage({command: COMMANDS.SAVE}, 
     function(response) {
             console.log(response);
     });

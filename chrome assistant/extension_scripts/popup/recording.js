@@ -6,7 +6,7 @@ $( document ).ready(function() {/*load data from background script*/
     //     }
 
     // });
-    chrome.runtime.sendMessage({command: "peek"}, function(response) {
+    chrome.runtime.sendMessage({command: COMMANDS.PEEK}, function(response) {
         //sends a message to the recording_content_state, which turns off
         let tutorial = JSON.parse(response.tutorial);
         $("#formName").val(tutorial.tutorial_name);
@@ -14,7 +14,7 @@ $( document ).ready(function() {/*load data from background script*/
     });
 });
 
-$("#back_button").click(function(){
+$("#back_button").on("click", function(){
         chrome.browserAction.setPopup({
             popup: "./html/popup.html"
          });
@@ -24,7 +24,7 @@ $("#back_button").click(function(){
 
 /* On click functions for elements in popup.html */
 $("#updateTitle").on("click", function(){
-        chrome.runtime.sendMessage({command: "updateTitleDesc", tutorial_name: $("#form input").val(), description: $("#formDescription").val()}, function(response) {
+        chrome.runtime.sendMessage({command: COMMANDS.UPDATETITLEDESC, tutorial_name: $("#form input").val(), description: $("#formDescription").val()}, function(response) {
         //sends a message to the recording_content_state, which sets the tutorial name
             console.log(response.tutorial);
         });
@@ -41,25 +41,26 @@ $("#updateTitle").on("click", function(){
 $("#finishRecording").on('click', function() {
     console.log("Ending recording?");
     // change recording state to false
-    chrome.runtime.sendMessage({command: "end_recording"}, function(response) {
+    chrome.runtime.sendMessage({command: COMMANDS.ENDRECORDING}, function(response) {
         //sends a message to the recording_state.js, which sets recording to false
         
     });
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {command: "disable_hot_key"}, function(response2) {
+        chrome.tabs.sendMessage(tabs[0].id, {command: COMMANDS.DISABLE_HOT_KEY}, function(response2) {
           console.log(response2);
         });
     });
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {command: "get_auth"}, function(response2) {
+        chrome.tabs.sendMessage(tabs[0].id, {command: COMMANDS.GET_AUTH}, function(response2) {
           console.log(response2);
         });
   });
     // chrome.runtime.sendMessage({command: "get_auth"});
-    chrome.runtime.sendMessage({command: "save"}, 
+    chrome.runtime.sendMessage({command: COMMANDS.SAVE}, 
     function(response) {
             console.log(response);
     });
+    chrome.runtime.sendMessage({command: COMMANDS.RESET})
     // push the tutorial object to the server!!
     //****  TODO *****
     console.log("recording.js: Ending Recording");
