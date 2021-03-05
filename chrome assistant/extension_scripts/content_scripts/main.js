@@ -517,7 +517,11 @@ chrome.runtime.onMessage.addListener(
             deleteTutorialControlInterface();
             // location.reload();
             break;
+        case COMMANDS.NEXT:
+            goToNextURL();
+            break;
       }
+      return true;
 });
 /**
  * This function creates the prev and next buttons for the in page tutorial controls.

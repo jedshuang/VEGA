@@ -1,7 +1,7 @@
 var sendLoadMessageWithTutorial = function(response) {
     console.log(response.val()[$("#formName").val()]);
     var r = response.val()[$("#formName").val()];
-    chrome.runtime.sendMessage({command: COMMANDS.LOADRECORD, DAG: r.DAG, tutorial_name: r.name, description: r.description, id: r.root_node_id});
+    chrome.runtime.sendMessage({command: COMMANDS.LOADTUTORIAL, DAG: r.DAG, tutorial_name: r.name, description: r.description, id: r.root_node_id});
 }
 
 $(document).ready(function() {

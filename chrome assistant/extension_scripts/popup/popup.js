@@ -49,8 +49,15 @@ $( document ).ready(function() {
 	});
 	$("#connect").on("click", function(){
 		console.log("connect click");
-		chrome.runtime.sendMessage({command: "connect"}, function(response) {
+		chrome.runtime.sendMessage({command: COMMANDS.CONNECT}, function(response) {
 			console.log("Connect message sent");
+		});
+		
+	});
+	$("#disconnect").on("click", function(){
+		console.log("disconnect click");
+		chrome.runtime.sendMessage({command: COMMANDS.DISCONNECT}, function(response) {
+			console.log("Disconnect message sent");
 		});
 		
 	});

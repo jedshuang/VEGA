@@ -82,14 +82,8 @@ chrome.runtime.onMessage.addListener(
                 "from a content script:" + sender.tab.url :
                 "from the extension");
     switch(request.command){
-        case COMMANDS.LOADRECORD:
-          console.log(request);
-          tutorial.DAG = graphlib.json.read(request.DAG);
-          tutorial.current_node_id = request.id;
-          tutorial.root_node_id = request.id;
-          tutorial.tutorial_name = request.tutorial_name;
-          tutorial.description = request.description;
-          console.log(tutorial);
+        case COMMANDS.LOADTUTORIAL:
+          loadTutorial(request);
           break;
         case COMMANDS.UPDATETITLEDESC: 
           console.log("updateTitleDesc: " + request.tutorial_name + "\n" + tutorial.description);
@@ -202,20 +196,20 @@ chrome.runtime.onMessage.addListener(
           sendResponse("Clear complete");
           break; 
         case COMMANDS.RESET:
-          tutorial = new recording();
-          load_status = false;
-          console.log(tutorial);
+          reset();
           break;
         case COMMANDS.GETLOADSTATUS:
           sendResponse(load_status);
-          break; 
-
+          break;
         case COMMANDS.SETLOADSTATUS:
           load_status = request.value;
           sendResponse(load_status);
           break;
-        case "connect":
+        case COMMANDS.CONNECT:
           connect();
+          break;
+        case COMMANDS.DISCONNECT:
+          disconnect();
           break;
         // case "get_recording_state":
         //   return sendResponse({state: recording_state});
@@ -224,9 +218,23 @@ chrome.runtime.onMessage.addListener(
         default: 
         break;
     }
-
-
   });
+
+  function loadTutorial(request) {
+    console.log(request);
+    tutorial.DAG = graphlib.json.read(request.DAG);
+    tutorial.current_node_id = request.id;
+    tutorial.root_node_id = request.id;
+    tutorial.tutorial_name = request.tutorial_name;
+    tutorial.description = request.description;
+    console.log(tutorial);
+  }
+
+  function reset() {
+    tutorial = new recording();
+    load_status = false;
+    console.log(tutorial);
+  }
 
   var port = null;
 
@@ -238,19 +246,82 @@ chrome.runtime.onMessage.addListener(
     port.onMessage.addListener(onNativeMessage);
     port.onDisconnect.addListener(onDisconnected);
     console.log("Connecting to native messaging host");
+    // Send the following message to be echoed by the host
     var message = {"message": "Successfully received message from host!"};
     port.postMessage(message);
     // updateUiState();
   }
 
+  var tutorial_to_lookup = "";
+
+  var sendLoadMessageWithTutorial = function(response) {
+    // console.log(response.val());
+    console.log(tutorial_to_lookup);
+    var r = response.val()[tutorial_to_lookup];
+    console.log(r);
+    loadTutorial({DAG: r.DAG, tutorial_name: r.name, description: r.description, id: r.root_node_id});
+  }
+
   function onNativeMessage(message) {
     //appendMessage("Received message: <b>" + JSON.stringify(message) + "</b>");
     console.log(JSON.stringify(message));
+    let request = message[MESSAGE];
+    let args = request.split(" ");
+    if (args[0] === LOAD) {
+      tutorial_to_lookup = message[MESSAGE].substring(5);
+      console.log("Tutorial to lookup: " + tutorial_to_lookup);
+      //Loads the record into the frame and sends for the background
+
+      // clear to reset the current background state
+      reset();
+      // chrome.runtime.sendMessage({command: COMMANDS.REMOVE_INTERFACE})
+
+      chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+          // since only one tab should be active and in the current window at once
+          // the return variable should only have one entry
+          chrome.tabs.sendMessage(arrayOfTabs[0].id, {command:COMMANDS.REMOVE_INTERFACE}, function(response) {
+              console.log('Load action sent');
+          });//end send message
+      });//end query
+
+      // pass sendLoadMessageWithTutorial as a callback to getFromDatabase
+      getFromDatabase(sendLoadMessageWithTutorial);
+      var loaded = true;
+
+      if(loaded) {
+          // $("#searchR").prop("disabled", true);        // should stay enabled so that you can search again.
+          $("#beginR").prop("disabled", false);
+          $("#continue").css({"visibility":"hidden"});
+      }
+      // add a display of tutorial title and description
+    } else if (args[0] === START) {
+      console.log("Entering load record function");
+      chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+          // since only one tab should be active and in the current window at once
+          // the return variable should only have one entry
+          chrome.tabs.sendMessage(arrayOfTabs[0].id, {command:COMMANDS.LOAD}, function(response) {
+              console.log('Start action sent');
+          });//end send message
+      });//end query
+    } else if (args[0] === NEXT) {
+      chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+        chrome.tabs.sendMessage(arrayOfTabs[0].id, {command:COMMANDS.NEXT}, function(response) {
+            console.log('Next action sent');
+        });
+      });//end query
+    } else {
+      console.log("Unrecognized command: " + args[0]);
+    }
+    
   }
   
   function onDisconnected() {
     //appendMessage("Failed to connect: " + chrome.runtime.lastError.message);
     port = null;
-    console.log("Failed to connect: " + chrome.runtime.lastError.message);
+    console.log("Disconnected: " + chrome.runtime.lastError.message);
     // updateUiState();
+  }
+
+  function disconnect() {
+    port.disconnect();
   }

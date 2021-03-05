@@ -55,7 +55,7 @@ public class ATutorialTerminal extends ATerminalModel {
 		}
 		Application.log("app.sendMessage success ");
 
-		this.addOutput("My output");
+		this.addOutput("TODO: Have feedback message here");
 //		this.clear();
 	}
     
