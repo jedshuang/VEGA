@@ -23,7 +23,7 @@
     "background": {
         "scripts": ["./assets/js/axios.min.js", "./assets/js/graphlib.min.js", "./assets/js/jquery.js", "./assets/js/firebase.js", "./extension_scripts/rest.js", "./extension_scripts/constants.js", "./extension_scripts/background/background.js", "./extension_scripts/background/recording_state.js"]
     },
-    "content_security_policy": "script-src 'self' blob: filesystem:; object-src 'self'",
+    "content_security_policy":"script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
     "manifest_version":2
 }
 
