@@ -8,6 +8,7 @@ import java.io.InterruptedIOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import rx.Observable;
@@ -19,6 +20,7 @@ import util.models.TerminalModel;
 
 import com.cli.ATutorialTerminal;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.native_messaging.protocol.NativeRequest;
 import com.native_messaging.protocol.NativeResponse;
@@ -26,6 +28,7 @@ import com.native_messaging.protocol.NativeMessagingHelper;
 
 import bus.uigen.OEFrame;
 import bus.uigen.ObjectEditor;
+
 
 /**
  * Simple Example for Native App, handling Chrome extension native message.
@@ -37,6 +40,7 @@ import bus.uigen.ObjectEditor;
  */
 public class Application {
 
+	public final static String MESSAGE = "message";
 	private final AtomicBoolean interrompe;
 	private final static int TERMINAL_WIDTH = 600;
 	private final static int TERMINAL_HEIGHT = 600;
@@ -84,6 +88,7 @@ public class Application {
 		log("Starting the app...");
 
 		final Application app = new Application();
+		TerminalModel terminal = new ATutorialTerminal();
 
 		ConnectableObservable<String> obs = app.createObservable();
 		obs.observeOn(Schedulers.computation()).subscribe(new Observer<String>() {
@@ -121,6 +126,15 @@ public class Application {
 				}
 				log("response Json: " + responseJson);
 
+				Map<String, String> map;
+				try {
+					map = mapper.readValue(responseJson, new TypeReference<Map<String, String>>() {
+					});
+					terminal.addOutput(map.get(MESSAGE));
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				}
+
 				try {
 					NativeMessagingHelper.sendMessage(responseJson);
 				} catch (IOException e) {
@@ -133,7 +147,6 @@ public class Application {
 
 		obs.connect();
 
-		TerminalModel terminal = new ATutorialTerminal();
 		ObjectEditor.setDoPrints(false);
 		OEFrame frame = ObjectEditor.edit(terminal);
 		frame.setSize(TERMINAL_WIDTH, TERMINAL_HEIGHT);

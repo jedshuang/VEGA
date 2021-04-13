@@ -520,6 +520,10 @@ chrome.runtime.onMessage.addListener(
         case COMMANDS.NEXT:
             goToNextURL();
             break;
+        case COMMANDS.EXECUTE:
+            let input = document.querySelector("[style='border: thick solid green;']");
+            input.click();
+            break;
       }
       return true;
 });

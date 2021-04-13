@@ -5,6 +5,8 @@ const MESSAGE = "message";
 const LOAD = "load";
 const START = "start";
 const NEXT = "next";
+const QUIT = "quit";
+const EXECUTE = "execute";
 
 const COMMANDS = {
 
@@ -38,6 +40,7 @@ const COMMANDS = {
     GET_AUTH: "get_auth",                       // sent in recording.js
     REMOVE_INTERFACE: "remove_interface",       // sent in load_record.js
     NEXT: "next",                               // sent in background.js
+    EXECUTE: "execute",                         // sent in background.js
 
     // recording listening for commands
     UPDATERECORD: "update_record",      

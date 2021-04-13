@@ -55,8 +55,11 @@ public class ATutorialTerminal extends ATerminalModel {
 		}
 		Application.log("app.sendMessage success ");
 
-		this.addOutput("TODO: Have feedback message here");
 //		this.clear();
 	}
     
+	@Override
+	public void newOutput(String string) {
+		this.addOutput(string);
+	}
 }
