@@ -42,3 +42,15 @@ function getFromDatabase(callback) {
 
     ref.on('value', callback, function(err) {console.log(err)});
 }
+/***
+ * iteraction_data: 
+ * {
+ *    interaction_type: interaction_type,
+ *    time: time,
+ *    website_from: 'website'
+ * }
+ */
+function postInteractionEvent(tutorial_name, interaction_type, time, website_from, data) {
+    var interaction_ref = database.ref("interaction_log");
+    interaction_ref.child(tutorial_name).push({interaction_type: interaction_type, time: time, website_from: website_from, data: data});
+}

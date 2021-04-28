@@ -134,7 +134,8 @@ chrome.runtime.onMessage.addListener(
           }
           tutorial.current_node_id = request.next_id;
           sendResponse({msg: "Background: sending over entire DAG", tutorial:JSON.stringify(tutorial)});  
-          
+          // call postInteractionEvent with data from request.data as parameters
+          postInteractionEvent.apply(this, request.data);
           break;
 
         case COMMANDS.GETPREV:
@@ -145,7 +146,7 @@ chrome.runtime.onMessage.addListener(
           }
           tutorial.current_node_id = request.prev_id;
           sendResponse({msg: "Background: sending over entire DAG", tutorial:JSON.stringify(tutorial)});  
-          
+          postInteractionEvent.apply(this, request.data);
           break;
 
         case COMMANDS.GETOPTIONS:

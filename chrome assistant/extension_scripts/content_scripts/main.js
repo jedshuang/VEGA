@@ -604,7 +604,7 @@ function get_dag(callback){
 
 function get_next_node(tutorial, callback){
     //console.log(tutorial.DAG.outEdges(tutorial.current_node_id));
-   if(typeof(tutorial.DAG.outEdges(tutorial.current_node_id)[0]) == "undefined"){
+    if(typeof(tutorial.DAG.outEdges(tutorial.current_node_id)[0]) == "undefined"){
        //If this statement is reached, there are no more steps in the tutorial.
        alert("Thank you for completing the tutorial!");
        // remove student view
@@ -612,17 +612,24 @@ function get_next_node(tutorial, callback){
            $(document).remove(student_view);
        }
        callback(null);
-   }
-   else {
-   var next_id = tutorial.DAG.outEdges(tutorial.current_node_id)[0].w;
-    chrome.runtime.sendMessage({command: COMMANDS.GETNEXT, next_id:next_id}, function(response) {
+       return;
+    }
+
+    var next_id = tutorial.DAG.outEdges(tutorial.current_node_id)[0].w;
+    // this will go to the next step of the tutorial
+    dataToBeCollected = [tutorial.tutorial_name, INTERACTION_EVENT.NEXT, (new Date()).getTime(), window.location.href, next_id];
+    chrome.runtime.sendMessage({command: COMMANDS.GETNEXT, next_id:next_id, data:dataToBeCollected}, function(response) {
         callback(response);
     });
-    }
+
+    // data collection
+    // postInteractionEvent();
+
+    
 }
 function get_prev_node(tutorial, callback){
     //console.log(tutorial.DAG.outEdges(tutorial.current_node_id));
-   if(typeof(tutorial.DAG.inEdges(tutorial.current_node_id)[0]) == "undefined"){
+    if(typeof(tutorial.DAG.inEdges(tutorial.current_node_id)[0]) == "undefined"){
        //If this statement is reached, there are no more steps in the tutorial.
        alert("At the start");
        // remove student view
@@ -630,11 +637,14 @@ function get_prev_node(tutorial, callback){
            $(document).remove(student_view);
        }
        callback(null);
-   }
-   else{
-   var prev_id = tutorial.DAG.inEdges(tutorial.current_node_id)[0].v;
-    chrome.runtime.sendMessage({command: COMMANDS.GETPREV, prev_id:prev_id}, function(response) {
+       return;
+    }
+   
+    var prev_id = tutorial.DAG.inEdges(tutorial.current_node_id)[0].v;
+
+    dataToBeCollected = [tutorial.tutorial_name, INTERACTION_EVENT.PREV, (new Date()).getTime(), window.location.href, prev_id];
+    chrome.runtime.sendMessage({command: COMMANDS.GETPREV, prev_id:prev_id, data:dataToBeCollected}, function(response) {
         callback(response);
     });
-    }
+    
 }

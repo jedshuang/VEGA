@@ -41,3 +41,7 @@ const COMMANDS = {
     UPDATETUTORIAL: "update_tutorial"           // sent in background.js
 
 }
+const INTERACTION_EVENT = {
+    NEXT: "NEXT",           // student clicks next
+    PREV: "PREV"            // student clicks previous
+}
