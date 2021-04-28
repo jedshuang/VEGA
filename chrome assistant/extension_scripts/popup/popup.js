@@ -12,7 +12,87 @@ let connect = function() {
 $( document ).ready(function() {
 
 	// postToDatabase();
+	var signedIn = false;
+	var user = null;
+
+	chrome.runtime.sendMessage({ command: COMMANDS.ISUSERSIGNEDIN}, function (response) {
+		signedIn = response;
+		if(signedIn) {
+			$("#firebaseui-auth-container").hide();
+			$("#sign_out").show();
+			chrome.runtime.sendMessage({ command: COMMANDS.GETUSERSIGNEDIN}, function (response) {
+				user = response;
+			});
+		}
+		else {
+			$("#sign_out").hide();
+			$("#newR").hide();
+		}
+	});
+
 	
+	 // sign in UI
+		
+	// Initialize the FirebaseUI Widget using Firebase.
+	var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+	const uiConfig = {
+		callbacks: {
+			signInSuccessWithAuthResult: function (authResult, redirectUrl) {
+				console.log("current user");
+				console.log(firebase.auth().currentUser);
+				user = authResult;
+				$("#sign_out").show();
+				$("#newR").show();
+				chrome.runtime.sendMessage({ command: COMMANDS.SIGNIN, user: authResult }, function (response) {
+					// if (response.message === 'success') {
+						// window.location.replace('./welcome.html');
+					// }
+				});
+				return false;
+			},
+			uiShown: function () {
+			}
+		},
+		signInFlow: 'popup',
+		// signInSuccessUrl: '<url-to-redirect-to-on-success>',
+		signInOptions: [
+			// Leave the lines as is for the providers you want to offer your users.
+			{
+				provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+				customParameters: {
+					prompt: 'select_account'
+				}
+			},
+			firebase.auth.EmailAuthProvider.PROVIDER_ID
+		],
+		// Terms of service url.
+		// tosUrl: '<your-tos-url>',
+		// Privacy policy url.
+		// privacyPolicyUrl: '<your-privacy-policy-url>'
+	};
+
+	ui.start('#firebaseui-auth-container', uiConfig);
+	
+	
+
+
+	$("#sign_out").on("click", function() {
+		console.log("sign_out clicked");
+		chrome.runtime.sendMessage({command: COMMANDS.SIGNOUT}, function(response) {
+			if(response) {
+				user = null;
+				signedIn = false;
+				$("#firebaseui-auth-container").show();
+				$("#sign_out").hide();
+				$("#newR").hide();
+			}
+			else {
+				// alert the user that they need to sign out, or end the recording
+			}
+		});
+	});
+
 
 	//Loads the record into the frame
 	$("#load_record").on("click", function(){

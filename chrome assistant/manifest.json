@@ -21,9 +21,9 @@
         }
     ], 
     "background": {
-        "scripts": ["./assets/js/axios.min.js", "./assets/js/graphlib.min.js", "./assets/js/jquery.js", "./assets/js/firebase.js", "./extension_scripts/rest.js", "./extension_scripts/constants.js", "./extension_scripts/background/background.js", "./extension_scripts/background/recording_state.js"]
+        "scripts": ["./assets/js/axios.min.js", "./assets/js/graphlib.min.js", "./assets/js/jquery.js", "./assets/js/firebase.js", "./extension_scripts/rest.js", "./extension_scripts/constants.js", "./extension_scripts/background/recording_state.js", "./extension_scripts/background/background.js"]
     },
-    "content_security_policy": "script-src 'self' blob: filesystem:; object-src 'self'",
+    "content_security_policy": "script-src 'self' blob: filesystem: https://cdn.firebase.com https://apis.google.com https://www.gstatic.com https://vega-b1d4a.firebaseio.com https://*.firebaseio.com; object-src 'self'",
     "manifest_version":2
 }
 

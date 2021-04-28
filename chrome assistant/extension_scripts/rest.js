@@ -26,11 +26,14 @@ function postToDatabase(data) {
     var ref = database.ref("tutorials");
     
 
-    // var data = {
-    //     name: "Test",
-    //     DAG: "notadag"
-    // }
-    ref.child(Object.keys(data)[0]).set(data[Object.keys(data)[0]]);
+    var tutorialName = Object.keys(data)[0];
+    ref.child(tutorialName).set(data[Object.keys(data)[0]]);
+    console.log(tutorialName);
+
+    
+    var ref = database.ref("users");
+    // add ref child with new tutorial name under uid 
+    ref.child(data[Object.keys(data)[0]].maker).push(tutorialName)
 }
 
 function getFromDatabase(callback) {

@@ -1,6 +1,7 @@
 // This is the main JSON object which holds a tutorial. 
 
 "use strict";
+
 var tutorial = new recording();
 function recording(){
   this.DAG = new graphlib.Graph().setGraph({});
@@ -66,6 +67,7 @@ function sendUpdateMessage() {
 //advance to the next link, you will maintain the button on the bottom right.  
 //This should probably be cleaned up and not be global. 
 var load_status = false;
+
 // let recording_state = false;
 //"html" : <html here>
 //"entered_text" : This is the text the professor entered
@@ -76,12 +78,34 @@ var load_status = false;
 //Save: Right now this saves the recording stream and merges it into the DAG. In the future, a visualizaiton should\
 //merge the DAG.
 //Clear: This empties all of the items in the DAG and recording stream. (Say)
+var user = null;
 chrome.runtime.onMessage.addListener(
   async function(request, sender, sendResponse) {
     console.log(sender.tab ?
                 "from a content script:" + sender.tab.url :
                 "from the extension");
     switch(request.command){
+        case COMMANDS.SIGNIN:
+          user = request.user;
+          console.log(user);
+          break;
+        case COMMANDS.SIGNOUT:
+          if(recording_enabled) {
+            sendResponse(false);
+          }
+          else {
+            user = null;
+            sendResponse(true);
+          }
+          break;
+        case COMMANDS.ISUSERSIGNEDIN:
+          console.log(user);
+          sendResponse(user != null);
+          break;
+        case COMMANDS.GETUSERSIGNEDIN:
+          console.log("User" + user);
+          sendResponse(user);
+          break;
         case COMMANDS.LOADRECORD:
           console.log(request);
           tutorial.DAG = graphlib.json.read(request.DAG);
@@ -152,12 +176,14 @@ chrome.runtime.onMessage.addListener(
           //   }
 
           // });
+          console.log("SAVING");
+          console.log(user.user.uid);
           var data = {};
           data[tutorial.tutorial_name] = {
             name: tutorial.tutorial_name,
             description: tutorial.description,
             root_node_id: tutorial.root_node_id,
-            maker: "VEGA",
+            maker: user.user.uid,
             DAG: exportDAG(tutorial),
             date: "2019"
             

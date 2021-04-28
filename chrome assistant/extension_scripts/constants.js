@@ -18,6 +18,10 @@ const COMMANDS = {
     RESET: "reset",                             // sent in load_record.js                       // Removes any loaded recordings and resets load_status to false
     GETLOADSTATUS: "get-load-status",           // sent in main.js
     SETLOADSTATUS: "set-load-satus",            // sent in main.js
+    SIGNIN: "sign_in",                          // sent in popup.js
+    SIGNOUT: "sign_out",                        // sent in popup.js
+    ISUSERSIGNEDIN: "is_user_signed_in",        // sent in popup.js
+    GETUSERSIGNEDIN: "get_user_signed_in",      // sent in popup.js
     
     // recording_state listening for commands
     STARTRECORDING: "start_recording",          // sent in new_record.js

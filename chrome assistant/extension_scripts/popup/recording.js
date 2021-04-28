@@ -54,13 +54,13 @@ $("#finishRecording").on('click', function() {
         chrome.tabs.sendMessage(tabs[0].id, {command: COMMANDS.GET_AUTH}, function(response2) {
           console.log(response2);
         });
-  });
+    });
     // chrome.runtime.sendMessage({command: "get_auth"});
     chrome.runtime.sendMessage({command: COMMANDS.SAVE}, 
     function(response) {
             console.log(response);
     });
-    chrome.runtime.sendMessage({command: COMMANDS.RESET})
+    chrome.runtime.sendMessage({command: COMMANDS.RESET});
     // push the tutorial object to the server!!
     //****  TODO *****
     console.log("recording.js: Ending Recording");
@@ -70,7 +70,28 @@ $("#finishRecording").on('click', function() {
      //Changes page immediately
      window.location.href="/html/popup.html";
 });
-
+$("#cancelRecording").on('click', function() {
+    chrome.runtime.sendMessage({command: COMMANDS.ENDRECORDING}, function(response) {
+        //sends a message to the recording_state.js, which sets recording to false
+        
+    });
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {command: COMMANDS.DISABLE_HOT_KEY}, function(response2) {
+          console.log(response2);
+        });
+    });
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {command: COMMANDS.GET_AUTH}, function(response2) {
+          console.log(response2);
+        });
+    });
+    chrome.runtime.sendMessage({command: COMMANDS.RESET});
+    chrome.browserAction.setPopup({
+        popup: "./html/popup.html"
+     });
+     //Changes page immediately
+     window.location.href="/html/popup.html";
+});
 // chrome.runtime.sendMessage({command: "end_recording"}, 
 //     function(response) {
 //     //sends a message to the recording_content_state, which turns off
