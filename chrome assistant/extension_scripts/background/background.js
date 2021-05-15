@@ -99,13 +99,14 @@ chrome.runtime.onMessage.addListener(
 
         case COMMANDS.GETNEXT:
           if(typeof tutorial.DAG.node(request.next_id) == "undefined" ){
-            sendResponse({msg: "Out of steps!", tutorial:null});  
+            sendResponse({msg: "Out of steps!", tutorial:null}); 
+            sendMessageToTerminal("Thank you for completing the tutorial " + tutorial.tutorial_name + "!"); 
             break;
           }
           tutorial.current_node_id = request.next_id;
           sendResponse({msg: "Background: sending over entire DAG", tutorial:JSON.stringify(tutorial)});  
           let currNode = get_current_node(tutorial);
-          sendMessageToTerminal("Now at step: \"" + currNode.title_text + "\"\nURL: " + currNode.url);
+          sendMessageToTerminal("Now at step: \"" + currNode.title_text + "\"\nInstructions: " + currNode.entered_text + "\nURL: " + currNode.url);
           break;
 
         case COMMANDS.GETPREV:
@@ -306,7 +307,7 @@ chrome.runtime.onMessage.addListener(
       });//end query
       sendMessageToTerminal("Tutorial started successfully!");
       let currNode = get_current_node(tutorial);
-      sendMessageToTerminal("Now at step: \"" + currNode.title_text + "\"\nURL: " + currNode.url);
+      sendMessageToTerminal("Now at step: \"" + currNode.title_text + "\"\nInstructions: " + currNode.entered_text + "\"\nURL: " + currNode.url);
     } else if (args[0] === NEXT) {
       chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
         chrome.tabs.sendMessage(arrayOfTabs[0].id, {command:COMMANDS.NEXT}, function(response) {
@@ -314,8 +315,9 @@ chrome.runtime.onMessage.addListener(
         });
       });//end query
     } else if (args[0] === EXECUTE) {
+      let input = message[MESSAGE].substring(8);
       chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
-        chrome.tabs.sendMessage(arrayOfTabs[0].id, {command:COMMANDS.EXECUTE}, function(response) {
+        chrome.tabs.sendMessage(arrayOfTabs[0].id, {command:COMMANDS.EXECUTE, inputArg: input}, function(response) {
             console.log('Execute action sent');
         });
       });
