@@ -436,8 +436,14 @@ function loadHTMLContent(tutorial){
             if(document.body.contains( document.getElementById(popup_ID) )){
                 document.getElementById(popup_ID).remove();
             }
+            // clear any highlighted elements from the last step
             for (var i = 0, element; element = all_elements[i++];) {
-                
+                if(element.style.border === "thick solid green"){
+                    element.style.border = "none";
+                }
+            }
+            // highlight the element of the current step
+            for (var i = 0, element; element = all_elements[i++];) {                
                 if(element.outerHTML == current_node.html){
                     element.style.border = "thick solid green";
                     let edit_box = create_info_box($(element).offset().top, $(element).offset().left+50, element, popup_ID, current_node);
@@ -517,7 +523,32 @@ chrome.runtime.onMessage.addListener(
             deleteTutorialControlInterface();
             // location.reload();
             break;
+        case COMMANDS.NEXT:
+            goToNextURL();
+            break;
+        case COMMANDS.EXECUTE:
+            // get the highlighted element
+            let input = document.querySelector("[style='border: thick solid green;']");
+            if (input.getAttribute("type") === "text") {
+                console.log(request.inputArg)
+                input.value = request.inputArg;
+            } // the following 'else if' is entirely hard-coded due to time constraints for a working example
+                // it should be changed for dynamic selection of options
+             else if (input.getAttribute("id") === "o21") {
+                document.getElementById('sample').value=21;
+                document.getElementById('seq_src_sample').checked = true;
+                document.getElementById('type_d').checked = true;
+                document.getElementById('organism').value = "Zea mays";
+                document.getElementById('common_name').value = "Corn";
+                document.getElementById('gp_name').value = "Ap Transposon";
+                document.getElementById('class').value = "DNA Transposon";
+                document.getElementById('function').value = "Transpose";
+            } else {
+                input.click();
+            }
+            break;
       }
+      return true;
 });
 /**
  * This function creates the prev and next buttons for the in page tutorial controls.
@@ -611,6 +642,7 @@ function get_next_node(tutorial, callback){
        if(student_view != null) {
            $(document).remove(student_view);
        }
+       chrome.runtime.sendMessage({command: COMMANDS.GETNEXT, next_id:undefined});
        callback(null);
    }
    else {

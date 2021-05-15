@@ -71,7 +71,7 @@ var load_status = false;
 //"entered_text" : This is the text the professor entered
 
 //This background listener listens for comamnds from the content script. The commands are:
-//Get: this returns the first itme in the stack
+//Get: this returns the first item in the stack
 //Send: This adds an item to the stack
 //Save: Right now this saves the recording stream and merges it into the DAG. In the future, a visualizaiton should\
 //merge the DAG.
@@ -82,14 +82,8 @@ chrome.runtime.onMessage.addListener(
                 "from a content script:" + sender.tab.url :
                 "from the extension");
     switch(request.command){
-        case COMMANDS.LOADRECORD:
-          console.log(request);
-          tutorial.DAG = graphlib.json.read(request.DAG);
-          tutorial.current_node_id = request.id;
-          tutorial.root_node_id = request.id;
-          tutorial.tutorial_name = request.tutorial_name;
-          tutorial.description = request.description;
-          console.log(tutorial);
+        case COMMANDS.LOADTUTORIAL:
+          loadTutorial(request);
           break;
         case COMMANDS.UPDATETITLEDESC: 
           console.log("updateTitleDesc: " + request.tutorial_name + "\n" + tutorial.description);
@@ -105,12 +99,14 @@ chrome.runtime.onMessage.addListener(
 
         case COMMANDS.GETNEXT:
           if(typeof tutorial.DAG.node(request.next_id) == "undefined" ){
-            sendResponse({msg: "Out of steps!", tutorial:null});  
+            sendResponse({msg: "Out of steps!", tutorial:null}); 
+            sendMessageToTerminal("Thank you for completing the tutorial " + tutorial.tutorial_name + "!"); 
             break;
           }
           tutorial.current_node_id = request.next_id;
           sendResponse({msg: "Background: sending over entire DAG", tutorial:JSON.stringify(tutorial)});  
-          
+          let currNode = get_current_node(tutorial);
+          sendMessageToTerminal("Now at step: \"" + currNode.title_text + "\"\nInstructions: " + currNode.entered_text + "\nURL: " + currNode.url);
           break;
 
         case COMMANDS.GETPREV:
@@ -202,17 +198,20 @@ chrome.runtime.onMessage.addListener(
           sendResponse("Clear complete");
           break; 
         case COMMANDS.RESET:
-          tutorial = new recording();
-          load_status = false;
-          console.log(tutorial);
+          reset();
           break;
         case COMMANDS.GETLOADSTATUS:
           sendResponse(load_status);
-          break; 
-
+          break;
         case COMMANDS.SETLOADSTATUS:
           load_status = request.value;
           sendResponse(load_status);
+          break;
+        case COMMANDS.CONNECT:
+          connect();
+          break;
+        case COMMANDS.DISCONNECT:
+          disconnect();
           break;
         // case "get_recording_state":
         //   return sendResponse({state: recording_state});
@@ -221,6 +220,155 @@ chrome.runtime.onMessage.addListener(
         default: 
         break;
     }
-
-
   });
+
+  function loadTutorial(request) {
+    console.log(request);
+    tutorial.DAG = graphlib.json.read(request.DAG);
+    tutorial.current_node_id = request.id;
+    tutorial.root_node_id = request.id;
+    tutorial.tutorial_name = request.tutorial_name;
+    tutorial.description = request.description;
+    console.log(tutorial);
+  }
+
+  function reset() {
+    tutorial = new recording();
+    load_status = false;
+    console.log(tutorial);
+  }
+
+  var port = null;
+
+  function connect() {
+    var hostName = "com.unccs.research.tutorial_creator";
+    // var hostName = "com.google.chrome.example.echo";
+    //appendMessage("Connecting to native messaging host <b>" + hostName + "</b>")
+    port = chrome.runtime.connectNative(hostName);
+    port.onMessage.addListener(onNativeMessage);
+    port.onDisconnect.addListener(onDisconnected);
+    console.log("Connecting to native messaging host");
+    // Send the following message to be echoed by the host
+    sendMessageToTerminal("Successfully connected to Chrome extension!");
+    // updateUiState();
+  }
+
+  var tutorial_to_lookup = "";
+
+  var sendLoadMessageWithTutorial = function(response) {
+    // console.log(response.val());
+    console.log(tutorial_to_lookup);
+    var r = response.val()[tutorial_to_lookup];
+    console.log(r);
+    loadTutorial({DAG: r.DAG, tutorial_name: r.name, description: r.description, id: r.root_node_id});
+  }
+
+  function onNativeMessage(message) {
+    //appendMessage("Received message: <b>" + JSON.stringify(message) + "</b>");
+    console.log(JSON.stringify(message));
+    let request = message[MESSAGE];
+    let args = request.split(" ");
+    if (args[0] === LOAD) {
+      tutorial_to_lookup = message[MESSAGE].substring(5);
+      console.log("Tutorial to lookup: " + tutorial_to_lookup);
+      //Loads the record into the frame and sends for the background
+
+      // clear to reset the current background state
+      reset();
+      // chrome.runtime.sendMessage({command: COMMANDS.REMOVE_INTERFACE})
+
+      chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+          // since only one tab should be active and in the current window at once
+          // the return variable should only have one entry
+          chrome.tabs.sendMessage(arrayOfTabs[0].id, {command:COMMANDS.REMOVE_INTERFACE}, function(response) {
+              console.log('Load action sent');
+          });//end send message
+      });//end query
+
+      // pass sendLoadMessageWithTutorial as a callback to getFromDatabase
+      getFromDatabase(sendLoadMessageWithTutorial);
+      var loaded = true;
+
+      if(loaded) {
+          // $("#searchR").prop("disabled", true);        // should stay enabled so that you can search again.
+          $("#beginR").prop("disabled", false);
+          $("#continue").css({"visibility":"hidden"});
+          sendMessageToTerminal("Tutorial loaded successfully!");
+      }
+      // add a display of tutorial title and description
+    } else if (args[0] === START) {
+      console.log("Entering load record function");
+      chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+          // since only one tab should be active and in the current window at once
+          // the return variable should only have one entry
+          chrome.tabs.sendMessage(arrayOfTabs[0].id, {command:COMMANDS.LOAD}, function(response) {
+              console.log('Start action sent');
+          });//end send message
+      });//end query
+      sendMessageToTerminal("Tutorial started successfully!");
+      let currNode = get_current_node(tutorial);
+      sendMessageToTerminal("Now at step: \"" + currNode.title_text + "\"\nInstructions: " + currNode.entered_text + "\"\nURL: " + currNode.url);
+    } else if (args[0] === NEXT) {
+      chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+        chrome.tabs.sendMessage(arrayOfTabs[0].id, {command:COMMANDS.NEXT}, function(response) {
+            console.log('Next action sent');
+        });
+      });//end query
+    } else if (args[0] === EXECUTE) {
+      let input = message[MESSAGE].substring(8);
+      chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+        chrome.tabs.sendMessage(arrayOfTabs[0].id, {command:COMMANDS.EXECUTE, inputArg: input}, function(response) {
+            console.log('Execute action sent');
+        });
+      });
+      sendMessageToTerminal("Step executed successfully!");
+    } else if (args[0] === QUIT) {
+      console.log("Quitting tutorial");
+        // set the popup to the popup.html
+        // send reset command, remove interface
+        chrome.runtime.sendMessage({command: COMMANDS.RESET});
+        // reload the page
+        chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+            // since only one tab should be active and in the current window at once
+            // the return variable should only have one entry
+            chrome.tabs.sendMessage(arrayOfTabs[0].id, {command:COMMANDS.REMOVE_INTERFACE}, function(response) {
+                console.log('Remove interface action sent');
+            });//end send message
+        });//end query
+      chrome.browserAction.setPopup({
+        popup: "./html/popup.html"
+      });
+		//Changes page immediately
+		window.location.href="/html/popup.html";
+      disconnect();
+    } else {
+      console.log("Unrecognized command: " + args[0]);
+    }
+    
+  }
+  
+  function onDisconnected() {
+    //appendMessage("Failed to connect: " + chrome.runtime.lastError.message);
+    port = null;
+    console.log("Disconnected: " + chrome.runtime.lastError.message);
+    // updateUiState();
+  }
+
+  function disconnect() {
+    port.disconnect();
+  }
+
+  function sendMessageToTerminal(message) {
+    var m = {"message": message};
+    port.postMessage(m);
+  }
+
+  /*
+  * Functions for accessing members of the tutorial object.
+  */
+  //Input: {DAG: graphlib, current_node_id, root_node_id, name}
+  //Output: The value of the node at the current node id.
+  //Ex: {url: "some url", entered_text:"some text", title_text:"a title", entered_html:"html"}
+  function get_current_node(tutorial){
+    return tutorial.DAG.node(tutorial.current_node_id).node_value;
+  }
