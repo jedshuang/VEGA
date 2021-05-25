@@ -1,3 +1,3 @@
 #!/bin/bash
 
-java -jar "$APOLLO/bin/apollod.jar"
+java -jar "/Users/jedidiah/Desktop/College/Tutorial Research/VEGA/bin/apollod.jar"

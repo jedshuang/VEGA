@@ -127,6 +127,20 @@ $( document ).ready(function() {
 		});
 		
 	});
+	$("#connect").on("click", function(){
+		console.log("connect click");
+		chrome.runtime.sendMessage({command: COMMANDS.CONNECT}, function(response) {
+			console.log("Connect message sent");
+		});
+		
+	});
+	$("#disconnect").on("click", function(){
+		console.log("disconnect click");
+		chrome.runtime.sendMessage({command: COMMANDS.DISCONNECT}, function(response) {
+			console.log("Disconnect message sent");
+		});
+		
+	});
 	// If recording or if a tutorial is loaded, then the opposite button should be disabled
 	chrome.runtime.sendMessage({command: COMMANDS.GETLOADSTATUS}, function(response) {
         //sends a message to the recording_content_state, if recording disable the load_record button

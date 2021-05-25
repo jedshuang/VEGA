@@ -3,7 +3,7 @@
     "description": "Hightlight elements on the page and chain them into integrated web tutorials.",
     "version": "0.1",
     "permissions": [
-    "tabs","<all_urls>","background"
+    "tabs","<all_urls>","background","nativeMessaging"
     ],
     "browser_action": {
         "default_icon": "./assets/img/vega-logo-black.png",
@@ -23,7 +23,7 @@
     "background": {
         "scripts": ["./assets/js/axios.min.js", "./assets/js/graphlib.min.js", "./assets/js/jquery.js", "./assets/js/firebase.js", "./extension_scripts/rest.js", "./extension_scripts/constants.js", "./extension_scripts/background/recording_state.js", "./extension_scripts/background/background.js"]
     },
-    "content_security_policy": "script-src 'self' blob: filesystem: https://cdn.firebase.com https://apis.google.com https://www.gstatic.com https://vega-b1d4a.firebaseio.com https://*.firebaseio.com; object-src 'self'",
+    "content_security_policy":"script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
     "manifest_version":2
 }
 
